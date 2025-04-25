@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triolingo</title>
+
+</head>
+<body>
+    <div class="container-fluid bg-light" style="height: 100vh; position: relative;">
+        <!-- Sidebar Toggle Button -->
+        <div class="position-absolute" style="top: 10px; left: 10px;">
+            <button class="btn btn-light border" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar">
+                <i class="bi bi-list"></i> <!-- Bootstrap Icon -->
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="list-group">
+                    <li class="list-group-item"><a href="page1.php" class="text-decoration-none">Page 1</a></li>
+                    <li class="list-group-item"><a href="page2.php" class="text-decoration-none">Page 2</a></li>
+                    <li class="list-group-item"><a href="page3.php" class="text-decoration-none">Page 3</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Center Buttons -->
+        <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100%;">
+            <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson1.php" class="text-decoration-none text-dark">Lesson 1</a></button>
+            <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson2.php" class="text-decoration-none text-dark">Lesson 2</a></button>
+            <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson3.php" class="text-decoration-none text-dark">Lesson 3</a></button>
+        </div>
+    </div>
+</body>
+</html>
