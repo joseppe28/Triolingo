@@ -9,6 +9,9 @@
         body {
             background-color: #e3f2fd; /* Heller Blauton */
         }
+        h2 {
+            color: #0d6efd; /* Bootstrap Primärfarbe */
+        }
     </style>
 </head>
 <body>
