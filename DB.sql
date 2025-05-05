@@ -1,18 +1,17 @@
 Create Database Triolingo;
 Use Triolingo;
--- Table: Users
 
 CREATE TABLE Deutsch_Vocab (
     DID INT PriMARY KEY AUTO_INCREMENT,
     Wort VARCHAR(255) NOT NULL,
     Audio VARCHAR(255) NOT NULL,
-    Bild VARCHAR(255) NOT NULL
+    Bild VARCHAR(255)
 );
 CREATE TABLE Englisch_Vocab (
     EID INT PriMARY KEY AUTO_INCREMENT,
     Wort VARCHAR(255) NOT NULL,
     Audio VARCHAR(255) NOT NULL,
-    Bild VARCHAR(255) NOT NULL
+    Bild VARCHAR(255)
 );
 CREATE TABLE Vocab(
     VID INT PriMARY KEY AUTO_INCREMENT,
