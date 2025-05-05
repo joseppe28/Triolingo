@@ -9,11 +9,14 @@
         body {
             background-color: #e3f2fd; /* Heller Blauton */
         }
+        h2 {
+            color: #0d6efd; /* Bootstrap Primärfarbe */
+        }
     </style>
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card w-40 p-4 shadow"> <!-- Breite über Bootstrap-Klasse w-40 -->
+        <div class="card w-50 p-4 shadow"> <!-- Breite über Bootstrap-Klasse w-75 -->
             <h2 class="text-center mb-4">Registrieren</h2>
             <form id="registerForm" action="processRegister.php" method="post">
                 <div class="mb-3">
@@ -56,4 +59,4 @@
         });
     </script>
 </body>
-</html> 
+</html>

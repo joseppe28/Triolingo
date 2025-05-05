@@ -9,22 +9,11 @@
         body {
             background-color: #e3f2fd; /* Heller Blauton */
         }
-        .login-card {
-            max-width: 400px;
-            margin: auto;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .login-card h2 {
-            color: #0d6efd; /* Bootstrap Primärfarbe */
-        }
     </style>
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="login-card">
+        <div class="card w-50 p-4 shadow"> <!-- Breite über Bootstrap-Klasse w-50 -->
             <h2 class="text-center mb-4">Login</h2>
             <form action="processLogin.php" method="post">
                 <div class="mb-3">
