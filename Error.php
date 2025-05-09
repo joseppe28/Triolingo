@@ -17,8 +17,8 @@ session_start();
             <p class="text-center text-muted mb-4">
                 <?php
                 // Überprüfen, ob ein Fehler in der Session gespeichert ist
-                if (isset($_SESSION['error_message'])) {
-                    echo htmlspecialchars($_SESSION['error_message']); // Fehlergrund anzeigen
+                if (isset($_SESSION['err'])) {
+                    echo htmlspecialchars($_SESSION['err']); // Fehlergrund anzeigen
                 } else {
                     echo "Ein unbekannter Fehler ist aufgetreten.";
                 }

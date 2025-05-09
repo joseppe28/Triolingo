@@ -32,7 +32,7 @@
         exit(); 
     }
 
-    $sql = "SELECT username, password FROM User WHERE username = ? AND password = ?";
+    $sql = "SELECT name, passwort FROM User WHERE name = ? AND passwort = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ss", $user, $pass);
     $stmt->execute();
@@ -48,10 +48,11 @@
     if ($result->num_rows > 0) {
         // Save the username in the session
         $_SESSION['username']=$username;
-        header("Location: success.php");
+        header("Location: Main.php");
     } else {
         $_SESSION['err']="Login failed";
-        header("Location: Login.php");
+        header("Location: Error.php");
+        exit();
     }
 
     $conn->close();
