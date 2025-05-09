@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// Beispiel: Benutzername in der Session speichern (dies sollte normalerweise beim Login gesetzt werden)
+if (!isset($_SESSION['username'])) {
+    $_SESSION['username'] = 'MaxMustermann'; // Beispiel-Benutzername
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +16,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Triolingo</title>
-
 </head>
 <body>
     <div class="container-fluid bg-light" style="height: 100vh; position: relative;">
@@ -24,12 +32,18 @@
                 <h5 class="offcanvas-title" id="sidebarLabel">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div class="offcanvas-body">
+            <div class="offcanvas-body d-flex flex-column justify-content-between">
                 <ul class="list-group">
                     <li class="list-group-item"><a href="page1.php" class="text-decoration-none">Page 1</a></li>
                     <li class="list-group-item"><a href="page2.php" class="text-decoration-none">Page 2</a></li>
                     <li class="list-group-item"><a href="page3.php" class="text-decoration-none">Page 3</a></li>
                 </ul>
+                <!-- Benutzerinfo Button -->
+                <div class="mt-3">
+                    <a href="benutzerInfo.php" class="btn btn-primary w-100 text-decoration-none text-white">
+                        <?php echo htmlspecialchars($_SESSION['username']); ?>
+                    </a>
+                </div>
             </div>
         </div>
 
