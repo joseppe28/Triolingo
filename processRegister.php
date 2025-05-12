@@ -63,6 +63,7 @@ if ($stmt->error) {
 if ($stmt->affected_rows > 0) {
     // Save the username from the request in the session
     $_SESSION['username'] = $user;
+    $_SESSION['email'] = $email;
     header("Location: Main.php");
 } else {
     $_SESSION['err'] = "Registration failed";
