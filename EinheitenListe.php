@@ -7,10 +7,20 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Beispiel-Daten (normalerweise aus der Datenbank abrufen)
-$username = $_SESSION['username'];
-$email = $_SESSION['email'];	
+// Datenbankverbindung
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$dbname = "Triolingo";
 
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Verbindung zur Datenbank fehlgeschlagen: " . $conn->connect_error);
+}
+
+// Einheiten aus der Datenbank abrufen
+$sql = "SELECT EinID, Thema, Beschreibung FROM Einheit";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -18,12 +28,16 @@ $email = $_SESSION['email'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benutzerinfo</title>
+    <title>Einheiten Liste</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background-color: #F8F9FA; /* Heller Blauton */
+        }
+    </style>
 </head>
-
-<body class="bg-light">
-<!-- Sidebar -->
+<body>
     <div class="container-fluid bg-light" style="height: 100vh; position: relative;">
         <!-- Sidebar Toggle Button -->
         <div class="position-absolute" style="top: 10px; left: 10px;">
@@ -51,20 +65,28 @@ $email = $_SESSION['email'];
             </div>
         </div>
     </div>
-
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card w-50 p-4 shadow">
-            <h2 class="text-center mb-4">Benutzerinfo</h2>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Benutzername:</strong> <?php echo htmlspecialchars($username); ?></li>
-                <li class="list-group-item"><strong>E-Mail:</strong> <?php echo htmlspecialchars($email); ?></li>
-            </ul>
-            <div class="d-flex justify-content-between mt-4">
-            <a href="Main.php" class="btn btn-primary">Zurück</a>
-            <a href="logout.php" class="btn btn-danger">Logout</a>
-        </div>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Einheiten</h2>
+        <div class="list-group">
+            <?php
+            if ($result->num_rows > 0) {
+                // Einheiten anzeigen
+                while ($row = $result->fetch_assoc()) {
+                    echo '<a href="karteikartenListe.php?einheit_id=' . $row['EinID'] . '" class="list-group-item list-group-item-action">';
+                    echo '<strong>' . htmlspecialchars($row['Thema']) . '</strong><br>';
+                    echo '<small>' . htmlspecialchars($row['Beschreibung']) . '</small>';
+                    echo '</a>';
+                }
+            } else {
+                echo '<p class="text-center">Keine Einheiten gefunden.</p>';
+            }
+            ?>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>
