@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+if(!isset($_SESSION['Lives'])) {
+    $_SESSION['Lives'] = 3; // Initialize lives if not already set
+}
+
 // Check if vocablist exists in session, otherwise create a sample one
 if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
     // For testing purposes, if no vocab list exists, create a sample one
@@ -118,7 +122,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 // Incorrect answer - check for minor mistakes
                 const similarity = calculateSimilarity(userAnswer, correctAnswer);
                 
-                if (similarity > 0.7) {
+                if (similarity >= 0.7) {
                     // Minor mistake
                     feedbackElement.innerHTML = '<div class="alert alert-warning">Almost correct! The correct answer is: ' + correctAnswer + '</div>';
                 } else {
