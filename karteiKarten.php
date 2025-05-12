@@ -2,6 +2,7 @@
 
 Session_start(); // Start the session
 // db_connection.php
+$_SESSION['Lives'] = 3; // Initialize lives if not already set
 
 $servername = "localhost"; // Replace with your server name
 $username = "root";        // Replace with your database username
@@ -136,7 +137,7 @@ $_SESSION['vocabList'] = $vocabList;
                 <button id="next-btn" class="btn btn-primary nav-button">
                     <i class="bi bi-arrow-right"></i>
                 </button>
-                <a href="Writing_Lesson.php" id="finish-btn" class="btn btn-success nav-button" style="display: none;">
+                <a href="Matching_Lesson.php" id="finish-btn" class="btn btn-success nav-button" style="display: none;">
                     Finish <i class="bi bi-check-lg"></i>
                 </a>
             </div>
