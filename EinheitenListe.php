@@ -33,7 +33,7 @@ $result = $conn->query($sql);
     <style>
         body {
             margin: 0;
-            background-color: #F8F9FA; /* Heller Blauton */
+            background-color:rgb(158, 207, 255); /* Heller Blauton */
         }
     </style>
 </head>
@@ -65,7 +65,7 @@ $result = $conn->query($sql);
             </div>
         </div>
     </div>
-    <div class="container mt-5">
+    <div class="container">
         <h2 class="text-center mb-4">Einheiten</h2>
         <div class="list-group">
             <?php
