@@ -18,10 +18,11 @@ if ($conn->connect_error) {
 }
 
 // Fetch random vocab from the database
-$einheit = 1; // Replace with the desired Einheit ID
-$query = "SELECT * FROM vocab WHERE EinID = ? ORDER BY RAND() LIMIT 5";
+$einheit = $_POST["einheit"]; // Replace with the desired Einheit ID
+$vocab_count = $_POST["vocab_count"]; // Number of vocab to fetch
+$query = "SELECT * FROM vocab WHERE EinID = ? ORDER BY RAND() LIMIT ?";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $einheit);
+$stmt->bind_param("ii", $einheit, $vocab_count);
 $stmt->execute();
 $result = $stmt->get_result();
 

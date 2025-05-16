@@ -49,10 +49,58 @@ if (!isset($_SESSION['username'])) {
 
         <!-- Center Buttons -->
         <div class="d-flex flex-column align-items-center justify-content-center" style="height: 100%;">
-            <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson1.php" class="text-decoration-none text-dark">Lesson 1</a></button>
-            <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson2.php" class="text-decoration-none text-dark">Lesson 2</a></button>
+            <button vocab_count = 5 einheit = 1 class="btn btn-light mb-3 border" style="width: 150px;" ><a href="lesson1.php" class="text-decoration-none text-dark">Lesson 1</a></button>
+            <button vocab_count = 3 einheit = 2 class="btn btn-light mb-3 border" style="width: 150px;" ><a href="lesson2.php" class="text-decoration-none text-dark">Lesson 2</a></button>
             <button class="btn btn-light mb-3 border" style="width: 150px;"><a href="lesson3.php" class="text-decoration-none text-dark">Lesson 3</a></button>
         </div>
     </div>
+
+
+    <script>
+        function redirectToKarteiKarten(einheit, vocab_count) {
+            // Create a form element
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'karteiKarten.php';
+            form.style.display = 'none';
+            
+            // Create input for einheit
+            const einheitInput = document.createElement('input');
+            einheitInput.type = 'hidden';
+            einheitInput.name = 'einheit';
+            einheitInput.value = einheit;
+            form.appendChild(einheitInput);
+            
+            // Create input for vocab_count
+            const vocabCountInput = document.createElement('input');
+            vocabCountInput.type = 'hidden';
+            vocabCountInput.name = 'vocab_count';
+            vocabCountInput.value = vocab_count;
+            form.appendChild(vocabCountInput);
+            
+            // Append form to body, submit it, then remove it
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+
+    <script>
+        // Update the lesson buttons to use the function
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.btn.btn-light.mb-3.border');
+            buttons.forEach(button => {
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    const vocabCount = button.getAttribute('vocab_count');
+                    const einheit = button.getAttribute('einheit');
+                    redirectToKarteiKarten(einheit, vocabCount);
+                };
+                // Remove the anchor inside and set text directly on button
+                const text = button.querySelector('a').textContent;
+                button.textContent = text;
+            });
+        });
+    </script>
+
 </body>
 </html>
