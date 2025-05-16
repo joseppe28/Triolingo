@@ -55,6 +55,13 @@ $stmt->execute();
 
 if ($stmt->error) {
     $_SESSION['err'] = $stmt->error;
+    // Get the last inserted ID
+    $lastInsertId = $conn->insert_id;
+    if ($lastInsertId) {
+        $_SESSION['UserID'] = $lastInsertId;
+    } else {
+        $_SESSION['err'] = "Failed to retrieve user ID";
+    }
     header("Location: error.php");
     $conn->close();
     exit();

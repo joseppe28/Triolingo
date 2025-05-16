@@ -18,11 +18,25 @@ if ($conn->connect_error) {
 }
 
 // Fetch random vocab from the database
-$einheit = $_POST["einheit"]; // Replace with the desired Einheit ID
+$einheit = $_POST["einheit"]; // The selected Einheit ID
 $vocab_count = $_POST["vocab_count"]; // Number of vocab to fetch
-$query = "SELECT * FROM vocab WHERE EinID = ? ORDER BY RAND() LIMIT ?";
+
+// First get all vocabulary for this Einheit and join with level data
+$query = "SELECT v.*, IFNULL(l.Level, 0) as Level 
+          FROM vocab v 
+          LEFT JOIN level l ON v.VID = l.VID AND l.UID = ? 
+          WHERE v.EinID = ? 
+          ORDER BY IFNULL(l.Level, 0) ASC, RAND() 
+          LIMIT ?";
+
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ii", $einheit, $vocab_count);
+$userid = $_SESSION['UserID'] ?? 0; // Get user ID from session or default to 0
+if ($userid == 0) {
+    // Handle case where user ID is not set
+    echo "User ID not set.";
+    exit();
+}
+$stmt->bind_param("iii", $userid, $einheit, $vocab_count);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -45,10 +59,11 @@ if ($result->num_rows > 0) {
         $resultEN = $stmtEN->get_result();
         $englishWord = $resultEN->fetch_assoc()['Wort'];
         
-        // Store both words in the vocab list
+        // Store both words and the level in the vocab list
         $vocabList[] = [
             'vocab' => $germanWord,
-            'translation' => $englishWord
+            'translation' => $englishWord,
+            'level' => $row['Level']
         ];
     }
 }

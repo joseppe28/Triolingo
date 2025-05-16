@@ -28,7 +28,7 @@ if ($conn->connect_error) {
     exit();
 }
 
-$sql = "SELECT name, passwort, email FROM User WHERE name = ? AND passwort = ?";
+$sql = "SELECT UID, name, passwort, email FROM User WHERE name = ? AND passwort = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ss", $user, $pass);
 $stmt->execute();
@@ -42,9 +42,17 @@ if ($stmt->error) {
 
 $result = $stmt->get_result();
 if ($result->num_rows > 0) {
+    // Fetch the row once and use it for all values
+    $row = $result->fetch_assoc();
     // Save the username from the request in the session
     $_SESSION['username'] = $user;
-    $_SESSION['email'] = $result->fetch_assoc()['email'];
+    $_SESSION['email'] = $row['email'];
+    $_SESSION['UserID'] = $row['UID'];
+    if($_SESSION['UserID'] == 0) {
+        $_SESSION['err'] = "User ID not set.";
+        header("Location: error.php");
+        exit();
+    }
     header("Location: Main.php");
 } else {
     $_SESSION['err'] = "Login failed";

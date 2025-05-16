@@ -142,3 +142,135 @@ INSERT INTO Level (VID, UID, Level) VALUES
 (13, 1, 3), -- Max Mustermann knows Water - Wasser at level 3
 (14, 2, 2), -- Erika Musterfrau knows Milk - Milch at level 2
 (15, 3, 1); -- John Doe knows Bread - Brot at level 1
+
+-- Insert additional German vocabulary for Einheit 1
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES 
+('Mann', 'mann.mp3', 'mann.jpg'),
+('Frau', 'frau.mp3', 'frau.jpg'),
+('Kind', 'kind.mp3', 'kind.jpg'),
+('Junge', 'junge.mp3', 'junge.jpg'),
+('Mädchen', 'maedchen.mp3', 'maedchen.jpg'),
+('Wasser', 'wasser.mp3', 'wasser.jpg'),
+('Brot', 'brot.mp3', 'brot.jpg'),
+('Straße', 'strasse.mp3', 'strasse.jpg'),
+('Stadt', 'stadt.mp3', 'stadt.jpg'),
+('Land', 'land.mp3', 'land.jpg'),
+('Sonne', 'sonne.mp3', 'sonne.jpg'),
+('Mond', 'mond.mp3', 'mond.jpg'),
+('Stern', 'stern.mp3', 'stern.jpg'),
+('Himmel', 'himmel.mp3', 'himmel.jpg'),
+('Erde', 'erde.mp3', 'erde.jpg'),
+('Telefon', 'telefon.mp3', 'telefon.jpg'),
+('Computer', 'computer.mp3', 'computer.jpg'),
+('Schule', 'schule.mp3', 'schule.jpg'),
+('Büro', 'buero.mp3', 'buero.jpg'),
+('Zeit', 'zeit.mp3', 'zeit.jpg'),
+('Tag', 'tag.mp3', 'tag.jpg'),
+('Nacht', 'nacht.mp3', 'nacht.jpg'),
+('Morgen', 'morgen.mp3', 'morgen.jpg'),
+('Abend', 'abend.mp3', 'abend.jpg'),
+('Name', 'name.mp3', 'name.jpg'),
+('Freund', 'freund.mp3', 'freund.jpg'),
+('Familie', 'familie.mp3', 'familie.jpg'),
+('Eltern', 'eltern.mp3', 'eltern.jpg'),
+('Bruder', 'bruder.mp3', 'bruder.jpg'),
+('Schwester', 'schwester.mp3', 'schwester.jpg');
+
+-- Insert corresponding English vocabulary
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES 
+('Man', 'man.mp3', 'man.jpg'),
+('Woman', 'woman.mp3', 'woman.jpg'),
+('Child', 'child.mp3', 'child.jpg'),
+('Boy', 'boy.mp3', 'boy.jpg'),
+('Girl', 'girl.mp3', 'girl.jpg'),
+('Water', 'water.mp3', 'water.jpg'),
+('Bread', 'bread.mp3', 'bread.jpg'),
+('Street', 'street.mp3', 'street.jpg'),
+('City', 'city.mp3', 'city.jpg'),
+('Country', 'country.mp3', 'country.jpg'),
+('Sun', 'sun.mp3', 'sun.jpg'),
+('Moon', 'moon.mp3', 'moon.jpg'),
+('Star', 'star.mp3', 'star.jpg'),
+('Sky', 'sky.mp3', 'sky.jpg'),
+('Earth', 'earth.mp3', 'earth.jpg'),
+('Phone', 'phone.mp3', 'phone.jpg'),
+('Computer', 'computer.mp3', 'computer.jpg'),
+('School', 'school.mp3', 'school.jpg'),
+('Office', 'office.mp3', 'office.jpg'),
+('Time', 'time.mp3', 'time.jpg'),
+('Day', 'day.mp3', 'day.jpg'),
+('Night', 'night.mp3', 'night.jpg'),
+('Morning', 'morning.mp3', 'morning.jpg'),
+('Evening', 'evening.mp3', 'evening.jpg'),
+('Name', 'name.mp3', 'name.jpg'),
+('Friend', 'friend.mp3', 'friend.jpg'),
+('Family', 'family.mp3', 'family.jpg'),
+('Parents', 'parents.mp3', 'parents.jpg'),
+('Brother', 'brother.mp3', 'brother.jpg'),
+('Sister', 'sister.mp3', 'sister.jpg');
+
+-- Link vocabulary pairs to Einheit 1
+INSERT INTO Vocab (EID, DID, EinID) VALUES 
+(16, 16, 1), -- Man - Mann
+(17, 17, 1), -- Woman - Frau
+(18, 18, 1), -- Child - Kind
+(19, 19, 1), -- Boy - Junge
+(20, 20, 1), -- Girl - Mädchen
+(21, 21, 1), -- Water - Wasser
+(22, 22, 1), -- Bread - Brot
+(23, 23, 1), -- Street - Straße
+(24, 24, 1), -- City - Stadt
+(25, 25, 1), -- Country - Land
+(26, 26, 1), -- Sun - Sonne
+(27, 27, 1), -- Moon - Mond
+(28, 28, 1), -- Star - Stern
+(29, 29, 1), -- Sky - Himmel
+(30, 30, 1), -- Earth - Erde
+(31, 31, 1), -- Phone - Telefon
+(32, 32, 1), -- Computer - Computer
+(33, 33, 1), -- School - Schule
+(34, 34, 1), -- Office - Büro
+(35, 35, 1), -- Time - Zeit
+(36, 36, 1), -- Day - Tag
+(37, 37, 1), -- Night - Nacht
+(38, 38, 1), -- Morning - Morgen
+(39, 39, 1), -- Evening - Abend
+(40, 40, 1), -- Name - Name
+(41, 41, 1), -- Friend - Freund
+(42, 42, 1), -- Family - Familie
+(43, 43, 1), -- Parents - Eltern
+(44, 44, 1), -- Brother - Bruder
+(45, 45, 1); -- Sister - Schwester
+
+-- Assign random levels (1-3) for John Doe (UID 3) for the new vocabulary
+INSERT INTO Level (VID, UID, Level) VALUES 
+(16, 3, 0),
+(17, 3, 0),
+(18, 3, 0),
+(19, 3, 0),
+(20, 3, 1),
+(21, 3, 1),
+(22, 3, 1),
+(23, 3, 1),
+(24, 3, 1),
+(25, 3, 1),
+(26, 3, 1),
+(27, 3, 1),
+(28, 3, 1),
+(29, 3, 2),
+(30, 3, 2),
+(31, 3, 2),
+(32, 3, 2),
+(33, 3, 2),
+(34, 3, 2),
+(35, 3, 2),
+(36, 3, 2),
+(37, 3, 2),
+(38, 3, 2),
+(39, 3, 3),
+(40, 3, 3),
+(41, 3, 3),
+(42, 3, 3),
+(43, 3, 3),
+(44, 3, 3),
+(45, 3, 3);
