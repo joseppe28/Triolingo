@@ -57,13 +57,6 @@ Create Table User_Stats(
     FOREIGN KEY (UID) REFERENCES User(UID)
 );  
 
-Create Table Lesson(
-    LID INT primary key auto_increment,
-    BID INT NOT NULL,
-    UID INT NOT NULL,
-    foreign key (UID) references User(UID)
-);
-
 -- Insert test data into Einheit table
 INSERT INTO Einheit (Thema, Beschreibung) VALUES 
 ('Basics', 'Basic vocabulary for beginners'),

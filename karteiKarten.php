@@ -64,7 +64,8 @@ if ($result->num_rows > 0) {
         $vocabList[] = [
             'vocab' => $germanWord,
             'translation' => $englishWord,
-            'level' => $row['Level']
+            'level' => $row['Level'], 
+            'VID' => $row['VID'],
         ];
     }
 }
