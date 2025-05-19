@@ -5,17 +5,20 @@ if(!isset($_SESSION['Lives'])) {
     $_SESSION['Lives'] = 3; // Initialize lives if not already set
 }
 
-// Check if vocablist exists in session, otherwise create a sample one
+// Check if vocabList exists in session, otherwise create a sample one
 if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
     // For testing purposes, if no vocab list exists, create a sample one
     $_SESSION['vocabList'] = [
-        ['german' => 'Haus', 'english' => 'house'],
-        ['german' => 'Auto', 'english' => 'car'],
-        ['german' => 'Katze', 'english' => 'cat'],
-        ['german' => 'Hund', 'english' => 'dog'],
-        ['german' => 'Schule', 'english' => 'school']
+        ['vocab' => 'Haus', 'translation' => 'house', 'level' => 1],
+        ['vocab' => 'Auto', 'translation' => 'car', 'level' => 1],
+        ['vocab' => 'Katze', 'translation' => 'cat', 'level' => 1],
+        ['vocab' => 'Hund', 'translation' => 'dog', 'level' => 1],
+        ['vocab' => 'Schule', 'translation' => 'school', 'level' => 1]
     ];
 }
+
+// Debug output
+// echo "<pre>"; print_r($_SESSION['vocabList']); echo "</pre>";
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +45,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         <div class="card shadow">
             <div class="card-body p-4">
                 <h1 class="text-center text-primary mb-4">Writing Practice</h1>
+                <p class="text-center text-danger fw-bold">Lives Remaining: <span id="lives-count"><?= $_SESSION['Lives'] ?></span></p>
                 
                 <div class="text-center mb-4">
                     <p class="fs-5">Word <span id="current-index" class="fw-bold">1</span> of 
@@ -62,6 +66,10 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 <div class="text-center mt-4">
                     <button id="action-button" class="btn btn-primary btn-lg px-4">Check</button>
                 </div>
+                <div class="text-center mt-3">
+                    <button id="next-lesson-btn" class="btn btn-success d-none">Go to Next Lesson</button>
+                    <button id="main-menu-btn" class="btn btn-danger d-none">Go to Main Menu</button>
+                </div>
             </div>
         </div>
     </div>
@@ -69,16 +77,29 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Store vocab list from PHP session
+        // Store vocab list from PHP session - ensure it's not empty
         const vocabList = <?= json_encode($_SESSION['vocabList']) ?>;
+        
         let currentIndex = 0;
         let isChecking = true;
-
+        let lives = <?= $_SESSION['Lives'] ?>;
+        let completedWords = 0;
+        
         // Load the first word
         loadCurrentWord();
 
         function loadCurrentWord() {
-            document.getElementById('german-word').textContent = vocabList[currentIndex].vocab;
+            if (!vocabList || vocabList.length === 0) {
+                console.error("Vocab list is empty!");
+                document.getElementById('german-word').textContent = "No vocabulary loaded";
+                return;
+            }
+            
+            // Make sure we're accessing the correct properties
+            const currentWord = vocabList[currentIndex];
+            
+            // Use the vocab property to display the word (not german)
+            document.getElementById('german-word').textContent = currentWord.vocab;
             document.getElementById('current-index').textContent = currentIndex + 1;
             
             // Reset interface
@@ -97,7 +118,20 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             } else {
                 // Go to next word
                 currentIndex = (currentIndex + 1) % vocabList.length;
-                loadCurrentWord();
+                completedWords++;
+                
+                // Check if we've completed all words
+                if (completedWords >= vocabList.length) {
+                    document.getElementById('action-button').classList.add('d-none');
+                    document.getElementById('next-lesson-btn').classList.remove('d-none');
+                    document.getElementById('feedback').innerHTML = '<div class="alert alert-success">Congratulations! You\'ve completed all words!</div>';
+                    document.getElementById('feedback').style.display = 'block';
+                    
+                    // Save lives back to session
+                    updateLives(lives);
+                } else {
+                    loadCurrentWord();
+                }
             }
         });
 
@@ -109,7 +143,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
 
         function checkAnswer() {
             const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
-            const correctAnswer = vocabList[currentIndex].translation.toLowerCase();
+            const correctAnswer = vocabList[currentIndex].translation.toLowerCase(); // Use translation instead of english
             const feedbackElement = document.getElementById('feedback');
             
             document.getElementById('answer-input').disabled = true;
@@ -118,6 +152,9 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             if (userAnswer === correctAnswer) {
                 // Correct answer
                 feedbackElement.innerHTML = '<div class="alert alert-success">Correct!</div>';
+                
+                // Increase vocab level
+                updateVocabLevel(vocabList[currentIndex].vocab, true); // Use vocab instead of german
             } else {
                 // Incorrect answer - check for minor mistakes
                 const similarity = calculateSimilarity(userAnswer, correctAnswer);
@@ -128,12 +165,63 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 } else {
                     // Major mistake
                     feedbackElement.innerHTML = '<div class="alert alert-danger">Incorrect. The correct answer is: ' + correctAnswer + '</div>';
+                    
+                    // Decrease vocab level
+                    updateVocabLevel(vocabList[currentIndex].vocab, false); // Use vocab instead of german
+                    
+                    // Decrease lives
+                    lives--;
+                    document.getElementById('lives-count').textContent = lives;
+                    
+                    // Also update session
+                    updateLives(lives);
+                    
+                    // Check if out of lives
+                    if (lives <= 0) {
+                        document.getElementById('action-button').classList.add('d-none');
+                        document.getElementById('main-menu-btn').classList.remove('d-none');
+                        feedbackElement.innerHTML += '<div class="alert alert-danger mt-2">You have lost all your lives!</div>';
+                        return;
+                    }
                 }
             }
             
             document.getElementById('action-button').textContent = 'Next';
             isChecking = false;
         }
+        
+        // Function to update lives in session
+        function updateLives(newLives) {
+            <?= $_SESSION['Lives'] = $_SESSION['Lives'] -1 ?>;
+        }
+        
+        // Function to update vocab level
+        function updateVocabLevel(germanWord, isCorrect) {
+            // Create a request to update the level
+            fetch('update_vocab_level.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `word=${encodeURIComponent(germanWord)}&correct=${isCorrect ? 1 : 0}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Level update response:', data);
+            })
+            .catch(error => {
+                console.error('Error updating level:', error);
+            });
+        }
+        
+        // Add event listeners for navigation buttons
+        document.getElementById('next-lesson-btn').addEventListener('click', function() {
+            window.location.href = 'Main.php'; // Or any next lesson page
+        });
+        
+        document.getElementById('main-menu-btn').addEventListener('click', function() {
+            window.location.href = 'Main.php';
+        });
         
         // Function to calculate similarity between two strings (Levenshtein distance based)
         function calculateSimilarity(a, b) {

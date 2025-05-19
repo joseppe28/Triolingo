@@ -2,8 +2,9 @@
 session_start();
 
 // Beispiel: Benutzername in der Session speichern (dies sollte normalerweise beim Login gesetzt werden)
-if (!isset($_SESSION['username'])) {
-    $_SESSION['username'] = 'MaxMustermann'; // Beispiel-Benutzername
+if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
+    header("location: login.php");
+    exit;
 }
 ?>
 
