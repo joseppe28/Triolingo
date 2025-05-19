@@ -15,11 +15,11 @@ $email = $_SESSION['email'];
 
 <?php
     $servername = "localhost";
-    $username = "root";
+    $user = "root";
     $password = "root";
     $dbname = "triolingo";
 
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $user, $password, $dbname);
     if($conn->connect_error) {
         $_SESSION['err'] = $conn->connect_error;
         header("Location: error.php");
