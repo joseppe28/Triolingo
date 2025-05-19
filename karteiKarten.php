@@ -20,6 +20,7 @@ if ($conn->connect_error) {
 // Fetch random vocab from the database
 $einheit = $_POST["einheit"]; // The selected Einheit ID
 $vocab_count = $_POST["vocab_count"]; // Number of vocab to fetch
+$_SESSION['lesson'] = $_POST["lesson"]; // The selected lesson ID
 
 // First get all vocabulary for this Einheit and join with level data
 $query = "SELECT v.*, IFNULL(l.Level, 0) as Level 

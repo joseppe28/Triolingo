@@ -216,7 +216,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         
         // Add event listeners for navigation buttons
         document.getElementById('next-lesson-btn').addEventListener('click', function() {
-            window.location.href = 'Main.php'; // Or any next lesson page
+            window.location.href = 'completeLesson.php'; // Or any next lesson page
         });
         
         document.getElementById('main-menu-btn').addEventListener('click', function() {

@@ -57,6 +57,13 @@ Create Table User_Stats(
     FOREIGN KEY (UID) REFERENCES User(UID)
 );  
 
+Create Table Lesson(
+    LID INT primary key auto_increment,
+    BID INT NOT NULL,
+    UID INT NOT NULL,
+    foreign key (UID) references User(UID)
+);
+
 -- Insert test data into Einheit table
 INSERT INTO Einheit (Thema, Beschreibung) VALUES 
 ('Basics', 'Basic vocabulary for beginners'),
@@ -287,3 +294,9 @@ INSERT INTO User_Stats (UID, Lessons_Completed, Words_Learned) VALUES
 (2, 3, 8), -- Erika Musterfrau has completed 3 lessons and learned 8 words
 (3, 4, 12), -- John Doe has completed 4 lessons and learned 12 words
 (4, 2, 6); -- Jane Smith has completed 2 lessons and learned 6 words
+
+
+Insert into Lesson (BID, UID) values
+(1, 1), -- Max Mustermann completed lesson 1
+(2, 2), -- Erika Musterfrau completed lesson 2
+(3, 3), -- John Doe completed lesson 3
