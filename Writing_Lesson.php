@@ -145,6 +145,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
             const correctAnswer = vocabList[currentIndex].translation.toLowerCase(); // Use translation instead of english
             const feedbackElement = document.getElementById('feedback');
+            var VID = vocabList[currentIndex].VID;
             
             document.getElementById('answer-input').disabled = true;
             feedbackElement.style.display = 'block';
@@ -169,6 +170,9 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     // Decrease vocab level
                     updateVocabLevel(vocabList[currentIndex].vocab, false); // Use vocab instead of german
                     
+                    console.log("VID: " + VID);
+                    // Raise mistake count
+                    raiseMistake(VID);
                     // Decrease lives
                     lives--;
                     document.getElementById('lives-count').textContent = lives;
@@ -255,6 +259,25 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             const maxLen = Math.max(a.length, b.length);
             const distance = matrix[b.length][a.length];
             return 1 - distance / maxLen;
+        }
+
+        function raiseMistake(VID){
+            if (!VID) return;
+            // Send AJAX request to PHP script to raise mistake count for this vocab
+            fetch('raise_mistake.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `VID=${encodeURIComponent(VID)}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Mistake raised:', data);
+            })
+            .catch(error => {
+                console.error('Error raising mistake:', error);
+            });
         }
     </script>
 </body>

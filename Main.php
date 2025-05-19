@@ -38,7 +38,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
                 <ul class="list-group">
                     <li class="list-group-item"><a href="Main.php" class="text-decoration-none">Hauptseite</a></li>
                     <li class="list-group-item"><a href="EinheitenListe.php" class="text-decoration-none">Karteikarten Liste</a></li>
-                    <li class="list-group-item"><a href="page3.php" class="text-decoration-none">Page 3</a></li>
+                    <li class="list-group-item"><a href="FehlerStatistik.php" class="text-decoration-none">Fehler Statistik</a></li>
                 </ul>
                 <!-- Benutzerinfo Button -->
                 <div class="mt-3">

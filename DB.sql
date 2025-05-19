@@ -57,6 +57,16 @@ Create Table User_Stats(
     FOREIGN KEY (UID) REFERENCES User(UID)
 );  
 
+CREATE TABLE FehlerStatistik (
+    FehlerID INT PRIMARY KEY AUTO_INCREMENT,
+    UID INT NOT NULL,
+    VID INT NOT NULL,
+    FehlerAnzahl INT NOT NULL DEFAULT 0,
+    UNIQUE (UID, VID),
+    FOREIGN KEY (UID) REFERENCES User(UID),
+    FOREIGN KEY (VID) REFERENCES Vocab(VID)
+);
+
 -- Insert test data into Einheit table
 INSERT INTO Einheit (Thema, Beschreibung) VALUES 
 ('Basics', 'Basic vocabulary for beginners'),
