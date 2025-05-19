@@ -13,6 +13,42 @@ $email = $_SESSION['email'];
 
 ?>
 
+<?php
+    $servername = "localhost";
+    $user = "root";
+    $password = "root";
+    $dbname = "triolingo";
+
+    $conn = new mysqli($servername, $user, $password, $dbname);
+    if($conn->connect_error) {
+        $_SESSION['err'] = $conn->connect_error;
+        header("Location: error.php");
+        exit();
+    }
+
+    $sql = "Select Lessons_Completed, Words_Learned from User_Stats where UID = (select UID from User where email = ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $_SESSION['email']);
+    $stmt->execute();
+
+    if($stmt->error) {
+        $_SESSION['err'] = $stmt->error;
+        header("Location: error.php");
+        $conn->close();
+        exit();
+    }
+    $result = $stmt->get_result();
+    if($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $lessons_completed = $row['Lessons_Completed'];
+        $words_learned = $row['Words_Learned'];
+    } else {
+        $_SESSION['err'] = "No stats found for the user.";
+        header("Location: error.php");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,6 +95,8 @@ $email = $_SESSION['email'];
             <ul class="list-group">
                 <li class="list-group-item"><strong>Benutzername:</strong> <?php echo htmlspecialchars($username); ?></li>
                 <li class="list-group-item"><strong>E-Mail:</strong> <?php echo htmlspecialchars($email); ?></li>
+                <li class="list-group-item"><strong>Abgeschlossene Lektionen:</strong> <?php echo htmlspecialchars($lessons_completed); ?></li>
+                <li class="list-group-item"><strong>Gelernte Vokabeln:</strong> <?php echo htmlspecialchars($words_learned); ?></li>
             </ul>
             <div class="d-flex justify-content-between mt-4">
             <a href="Main.php" class="btn btn-primary">Zurück</a>

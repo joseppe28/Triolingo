@@ -50,6 +50,13 @@ CREATE TABLE User(
     Email VARCHAR(255) NOT NULL
 );
 
+Create Table User_Stats(
+    UID INT primary key,
+    Lessons_Completed INT,
+    Words_Learned INT, 
+    FOREIGN KEY (UID) REFERENCES User(UID)
+);  
+
 -- Insert test data into Einheit table
 INSERT INTO Einheit (Thema, Beschreibung) VALUES 
 ('Basics', 'Basic vocabulary for beginners'),
@@ -274,3 +281,9 @@ INSERT INTO Level (VID, UID, Level) VALUES
 (43, 3, 3),
 (44, 3, 3),
 (45, 3, 3);
+-- Insert test data into User_Stats table
+INSERT INTO User_Stats (UID, Lessons_Completed, Words_Learned) VALUES 
+(1, 5, 10), -- Max Mustermann has completed 5 lessons and learned 10 words
+(2, 3, 8), -- Erika Musterfrau has completed 3 lessons and learned 8 words
+(3, 4, 12), -- John Doe has completed 4 lessons and learned 12 words
+(4, 2, 6); -- Jane Smith has completed 2 lessons and learned 6 words
