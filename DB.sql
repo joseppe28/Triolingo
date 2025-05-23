@@ -36,6 +36,14 @@ CREATE TABLE Exercise(
     Typ VARCHAR(255) NOT NULL,
     FOREIGN KEY (EinID) REFERENCES Einheit(EinID)
 );
+
+CREATE TABLE User(
+    UID INT PriMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255) NOT NULL,
+    Passwort VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Level(
     LID INT PriMARY KEY AUTO_INCREMENT,
     VID INT NOT NULL,
@@ -45,12 +53,6 @@ CREATE TABLE Level(
     FOREIGN KEY (UID) REFERENCES User(UID)
 );
 
-CREATE TABLE User(
-    UID INT PriMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
-    Passwort VARCHAR(255) NOT NULL,
-    Email VARCHAR(255) NOT NULL
-);
 
 Create Table User_Stats(
     UID INT primary key,
@@ -65,6 +67,7 @@ Create Table Lesson(
     UID INT NOT NULL,
     foreign key (UID) references User(UID)
 );
+
 CREATE TABLE FehlerStatistik (
     FehlerID INT PRIMARY KEY AUTO_INCREMENT,
     UID INT NOT NULL,
@@ -310,4 +313,4 @@ INSERT INTO User_Stats (UID, Lessons_Completed, Words_Learned) VALUES
 Insert into Lesson (BID, UID) values
 (1, 1), -- Max Mustermann completed lesson 1
 (2, 2), -- Erika Musterfrau completed lesson 2
-(3, 3), -- John Doe completed lesson 3
+(3, 3); -- John Doe completed lesson 3
