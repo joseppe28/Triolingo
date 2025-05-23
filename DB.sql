@@ -314,3 +314,16 @@ Insert into Lesson (BID, UID) values
 (1, 1), -- Max Mustermann completed lesson 1
 (2, 2), -- Erika Musterfrau completed lesson 2
 (3, 3); -- John Doe completed lesson 3
+
+-- Insert test data into FehlerStatistik table
+INSERT INTO FehlerStatistik (UID, VID, FehlerAnzahl) VALUES
+(1, 1, 2),
+(1, 5, 1),
+(2, 2, 3),
+(2, 6, 0),
+(3, 3, 4),
+(3, 7, 2),
+(3, 20, 1),
+(4, 4, 0),
+(4, 8, 2),
+(4, 12, 1);
