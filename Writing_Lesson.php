@@ -126,9 +126,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     document.getElementById('next-lesson-btn').classList.remove('d-none');
                     document.getElementById('feedback').innerHTML = '<div class="alert alert-success">Congratulations! You\'ve completed all words!</div>';
                     document.getElementById('feedback').style.display = 'block';
-                    
-                    // Save lives back to session
-                    updateLives(lives);
                 } else {
                     loadCurrentWord();
                 }
@@ -175,20 +172,9 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     console.log("VID: " + VID);
                     // Raise mistake count
                     raiseMistake(VID);
-                    // Decrease lives
-                    lives--;
-                    document.getElementById('lives-count').textContent = lives;
                     
-                    // Also update session
-                    updateLives(lives);
-                    
-                    // Check if out of lives
-                    if (lives <= 0) {
-                        document.getElementById('action-button').classList.add('d-none');
-                        document.getElementById('main-menu-btn').classList.remove('d-none');
-                        feedbackElement.innerHTML += '<div class="alert alert-danger mt-2">You have lost all your lives!</div>';
-                        return;
-                    }
+                    // Remove life with AJAX
+                    removeLife();
                 }
             }
             
@@ -196,9 +182,27 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             isChecking = false;
         }
         
-        // Function to update lives in session
-        function updateLives(newLives) {
-            <?= $_SESSION['Lives'] = $_SESSION['Lives'] -1 ?>;
+        // Function to remove life with AJAX
+        function removeLife() {
+            fetch('remove_life.php', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Life update response:', data);
+                lives = data.lives;
+                document.getElementById('lives-count').textContent = lives;
+                
+                // Check if lives are exhausted
+                if (lives <= 0) {
+                    document.getElementById('action-button').classList.add('d-none');
+                    document.getElementById('main-menu-btn').classList.remove('d-none');
+                    document.getElementById('feedback').innerHTML += '<div class="alert alert-danger mt-2">You have lost all your lives!</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error updating life:', error);
+            });
         }
         
         // Function to update vocab level
