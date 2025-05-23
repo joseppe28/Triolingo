@@ -13,6 +13,13 @@ CREATE TABLE Englisch_Vocab (
     Audio VARCHAR(255) NOT NULL,
     Bild VARCHAR(255)
 );
+
+CREATE TABLE Einheit(
+    EinID INT PriMARY KEY AUTO_INCREMENT,
+    Thema VARCHAR(255) NOT NULL,
+    Beschreibung VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Vocab(
     VID INT PriMARY KEY AUTO_INCREMENT,
     EID INT NOT NULL,
@@ -22,11 +29,6 @@ CREATE TABLE Vocab(
     FOREIGN KEY (DID) REFERENCES Deutsch_Vocab(DID),
     FOREIGN KEY (EinID) REFERENCES Einheit(EinID)
 );
-CREATE TABLE Einheit(
-    EinID INT PriMARY KEY AUTO_INCREMENT,
-    Thema VARCHAR(255) NOT NULL,
-    Beschreibung VARCHAR(255) NOT NULL
-);
 
 CREATE TABLE Exercise(
     ExID INT PriMARY KEY AUTO_INCREMENT,
@@ -34,6 +36,14 @@ CREATE TABLE Exercise(
     Typ VARCHAR(255) NOT NULL,
     FOREIGN KEY (EinID) REFERENCES Einheit(EinID)
 );
+
+CREATE TABLE User(
+    UID INT PriMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255) NOT NULL,
+    Passwort VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL
+);
+
 CREATE TABLE Level(
     LID INT PriMARY KEY AUTO_INCREMENT,
     VID INT NOT NULL,
@@ -43,12 +53,6 @@ CREATE TABLE Level(
     FOREIGN KEY (UID) REFERENCES User(UID)
 );
 
-CREATE TABLE User(
-    UID INT PriMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
-    Passwort VARCHAR(255) NOT NULL,
-    Email VARCHAR(255) NOT NULL
-);
 
 Create Table User_Stats(
     UID INT primary key,
@@ -63,6 +67,7 @@ Create Table Lesson(
     UID INT NOT NULL,
     foreign key (UID) references User(UID)
 );
+
 CREATE TABLE FehlerStatistik (
     FehlerID INT PRIMARY KEY AUTO_INCREMENT,
     UID INT NOT NULL,
@@ -308,4 +313,17 @@ INSERT INTO User_Stats (UID, Lessons_Completed, Words_Learned) VALUES
 Insert into Lesson (BID, UID) values
 (1, 1), -- Max Mustermann completed lesson 1
 (2, 2), -- Erika Musterfrau completed lesson 2
-(3, 3), -- John Doe completed lesson 3
+(3, 3); -- John Doe completed lesson 3
+
+-- Insert test data into FehlerStatistik table
+INSERT INTO FehlerStatistik (UID, VID, FehlerAnzahl) VALUES
+(1, 1, 2),
+(1, 5, 1),
+(2, 2, 3),
+(2, 6, 0),
+(3, 3, 4),
+(3, 7, 2),
+(3, 20, 1),
+(4, 4, 0),
+(4, 8, 2),
+(4, 12, 1);
