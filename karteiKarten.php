@@ -155,7 +155,7 @@ $_SESSION['vocabList'] = $vocabList;
                 <button id="next-btn" class="btn btn-primary nav-button">
                     <i class="bi bi-arrow-right"></i>
                 </button>
-                <a href="Matching_Lesson.php" id="finish-btn" class="btn btn-success nav-button" style="display: none;">
+                <a href="talking_lesson.php" id="finish-btn" class="btn btn-success nav-button" style="display: none;">
                     Finish <i class="bi bi-check-lg"></i>
                 </a>
             </div>
