@@ -2,7 +2,7 @@
 session_start();
 
 // Initialize lives if not already set
-if (!isset($I_SESSON['Lives'])) {
+if (!isset($_SESSION['Lives'])) {  // Fixed typo in variable name
     $_SESSION['Lives'] = 3;
 }
 
@@ -125,8 +125,9 @@ shuffle($englishWords);
                 } else {
                     selectedGerman.classList.add('list-group-item-danger');
                     selectedEnglish.classList.add('list-group-item-danger');
-                    <?= $_SESSION['Lives'] = $_SESSION['Lives'] -1 ?>;
-                    livesCount.textContent = <?= $_SESSION['Lives'] ?>;
+                    
+                    // Remove life with AJAX
+                    removeLife();
 
                     // Reset selections after a short delay
                     setTimeout(() => {
@@ -135,21 +136,45 @@ shuffle($englishWords);
                         selectedGerman = null;
                         selectedEnglish = null;
                     }, 1000);
-
-                    // Check if lives are exhausted
-                    if (<?= $_SESSION['Lives'] ?> === 0) {
-                        resultMessage.textContent = 'You have lost all your lives. Try again!';
-                        mainMenuBtn.classList.remove('d-none');
-                        return;
-                    }
                 }
-
+                
                 // Check if all pairs are matched
                 if (correctCount === <?= count($vocabList) ?>) {
                     resultMessage.textContent = 'Congratulations! You matched all pairs!';
                     nextLessonBtn.classList.remove('d-none');
                 }
             }
+        }
+
+        // Function to remove life with AJAX
+        function removeLife() {
+            fetch('remove_life.php', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Life update response:', data);
+                lives = data.lives;
+                livesCount.textContent = lives;
+                
+                // Check if lives are exhausted
+                if (lives <= 0) {
+                    resultMessage.innerHTML = '<div class="alert alert-danger">You have lost all your lives. Try again!</div>';
+                    mainMenuBtn.classList.remove('d-none');
+                    
+                    // Disable all word selections
+                    const allListItems = document.querySelectorAll('.list-group-item');
+                    allListItems.forEach(item => {
+                        if (!item.classList.contains('list-group-item-success')) {
+                            item.classList.add('disabled');
+                            item.style.pointerEvents = 'none';
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating life:', error);
+            });
         }
 
         // Redirect to Writing Lesson
