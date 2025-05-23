@@ -153,6 +153,8 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             if (userAnswer === correctAnswer) {
                 // Correct answer
                 feedbackElement.innerHTML = '<div class="alert alert-success">Correct!</div>';
+
+                lowerMistake(VID);
                 
                 // Increase vocab level
                 updateVocabLevel(vocabList[currentIndex].vocab, true); // Use vocab instead of german
@@ -277,6 +279,25 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             })
             .catch(error => {
                 console.error('Error raising mistake:', error);
+            });
+        }
+
+        function lowerMistake(VID){
+            if (!VID) return;
+            // Send AJAX request to PHP script to lower mistake count for this vocab
+            fetch('lowerMistake.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `VID=${encodeURIComponent(VID)}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log('Mistake lowered:', data);
+            })
+            .catch(error => {
+                console.error('Error lowering mistake:', error);
             });
         }
     </script>
