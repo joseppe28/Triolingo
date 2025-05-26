@@ -58,6 +58,7 @@ if($result->num_rows > 0) {
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-attachment: fixed;
             font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
         }
         .sidebar-custom {

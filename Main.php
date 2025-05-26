@@ -21,6 +21,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-attachment: fixed;
             font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
         }
         .sidebar-custom {
@@ -109,6 +110,41 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             background: linear-gradient(90deg, #e0eafc 0%, #b2f7c1 100%);
             color: #198754;
         }
+        .lesson-card-btn.locked {
+            background: linear-gradient(90deg, #e0e0e0 0%, #c0c0c0 100%);
+            color: #777;
+            cursor: not-allowed;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .lesson-card-btn.locked:hover, .lesson-card-btn.locked:focus {
+            transform: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+            background: linear-gradient(90deg, #e0e0e0 0%, #c0c0c0 100%);
+        }
+        .tooltip-custom {
+            position: relative;
+        }
+        .tooltip-custom .tooltip-text {
+            visibility: hidden;
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            width: 200px;
+            font-size: 0.9rem;
+        }
+        .tooltip-custom:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
         @media (max-width: 600px) {
             .lesson-card-btn { width: 100%; min-height: 70px; font-size: 1.1rem; padding-left: 1rem;}
             .sidebar-toggle-btn { top: 12px; left: 12px; width: 44px; height: 44px; }
@@ -166,6 +202,13 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             ['vocab_count' => 5, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1'],
             ['vocab_count' => 3, 'einheit' => 2, 'lesson' => 2, 'label' => 'Lesson 2'],
             ['vocab_count' => 3, 'einheit' => 2, 'lesson' => 3, 'label' => 'Lesson 3'],
+            ['vocab_count' => 4, 'einheit' => 1, 'lesson' => 4, 'label' => 'Lesson 4'],
+            ['vocab_count' => 5, 'einheit' => 1, 'lesson' => 5, 'label' => 'Lesson 5'],
+            ['vocab_count' => 6, 'einheit' => 1, 'lesson' => 6, 'label' => 'Lesson 6'],
+            ['vocab_count' => 7, 'einheit' => 1, 'lesson' => 7, 'label' => 'Lesson 7'],
+            ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 8, 'label' => 'Lesson 8'],
+            ['vocab_count' => 9, 'einheit' => 1, 'lesson' => 9, 'label' => 'Lesson 9'],
+            ['vocab_count' => 10, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
         ];
         ?>
         <div class="main-content-center">
@@ -177,20 +220,47 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             </div>
             
             <div class="d-flex flex-column align-items-center gap-3">
-                <?php foreach ($lessons as $l): 
+                <?php 
+                // First lesson should always be accessible
+                $previousLessonCompleted = true;
+                
+                foreach ($lessons as $index => $l): 
                     $isCompleted = in_array($l['lesson'], $completedLessons);
-                    $btnClass = $isCompleted ? 'lesson-card-btn completed' : 'lesson-card-btn';
-                    $icon = $isCompleted ? 'bi-check-circle-fill' : 'bi-pencil-fill';
+                    $isLocked = !$previousLessonCompleted;
+                    
+                    // Set button class based on status
+                    if ($isCompleted) {
+                        $btnClass = 'lesson-card-btn completed';
+                        $icon = 'bi-check-circle-fill';
+                        $tooltipText = 'You have already completed this lesson';
+                    } elseif ($isLocked) {
+                        $btnClass = 'lesson-card-btn locked';
+                        $icon = 'bi-lock-fill';
+                        $tooltipText = 'Complete the previous lesson first';
+                    } else {
+                        $btnClass = 'lesson-card-btn';
+                        $icon = 'bi-pencil-fill';
+                        $tooltipText = '';
+                    }
+                    
+                    // Update for the next iteration
+                    $previousLessonCompleted = $isCompleted;
                 ?>
-                    <button 
-                        vocab_count="<?= $l['vocab_count']; ?>" 
-                        einheit="<?= $l['einheit']; ?>" 
-                        lesson="<?= $l['lesson']; ?>" 
-                        class="btn <?= $btnClass; ?> d-flex align-items-center"
-                        style="font-size:1.2rem;">
-                        <i class="bi <?= $icon ?> me-3 fs-3"></i>
-                        <?= htmlspecialchars($l['label']); ?>
-                    </button>
+                    <div class="position-relative tooltip-custom">
+                        <button 
+                            vocab_count="<?= $l['vocab_count']; ?>" 
+                            einheit="<?= $l['einheit']; ?>" 
+                            lesson="<?= $l['lesson']; ?>" 
+                            class="btn <?= $btnClass; ?> d-flex align-items-center"
+                            style="font-size:1.2rem;"
+                            <?= ($isCompleted || $isLocked) ? 'disabled' : ''; ?>>
+                            <i class="bi <?= $icon ?> me-3 fs-3"></i>
+                            <?= htmlspecialchars($l['label']); ?>
+                        </button>
+                        <?php if ($isCompleted || $isLocked): ?>
+                        <span class="tooltip-text"><?= $tooltipText ?></span>
+                        <?php endif; ?>
+                    </div>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -223,27 +293,27 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const toggleBtn = document.getElementById('sidebarToggleBtn');
+            const sidebar = document.getElementById('sidebar');
+            const toggleBtn = document.getElementById('sidebarToggleBtn');
 
-        sidebar.addEventListener('show.bs.offcanvas', function () {
-            toggleBtn.style.display = 'none';
-        });
-        sidebar.addEventListener('hidden.bs.offcanvas', function () {
-            toggleBtn.style.display = '';
-        });
+            sidebar.addEventListener('show.bs.offcanvas', function () {
+                toggleBtn.style.display = 'none';
+            });
+            sidebar.addEventListener('hidden.bs.offcanvas', function () {
+                toggleBtn.style.display = '';
+            });
 
-        const buttons = document.querySelectorAll('.lesson-card-btn');
-        buttons.forEach(button => {
-            button.onclick = function(e) {
-                e.preventDefault();
-                const vocabCount = button.getAttribute('vocab_count');
-                const einheit = button.getAttribute('einheit');
-                const lesson = button.getAttribute('lesson');
-                redirectToKarteiKarten(einheit, vocabCount, lesson);
-            };
+            const buttons = document.querySelectorAll('.lesson-card-btn:not(.completed):not(.locked)');
+            buttons.forEach(button => {
+                button.onclick = function(e) {
+                    e.preventDefault();
+                    const vocabCount = button.getAttribute('vocab_count');
+                    const einheit = button.getAttribute('einheit');
+                    const lesson = button.getAttribute('lesson');
+                    redirectToKarteiKarten(einheit, vocabCount, lesson);
+                };
+            });
         });
-    });
     </script>
 </body>
 </html>
