@@ -322,6 +322,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             currentIndex = (currentIndex + 1) % vocabList.length;
             completedWords++;
             tries = 0; // Reset tries after removing life
+            micBtn.classList.remove('recording');
             
             if (completedWords >= vocabList.length) {
                 // All words completed
@@ -346,7 +347,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         });
         
         nextLessonBtn.addEventListener('click', function() {
-            micBtn.classList.remove('recording');
             window.location.href = 'completeLesson.php';
         });
         
