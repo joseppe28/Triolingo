@@ -324,6 +324,15 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 feedbackElem.style.display = 'block';
                 nextBtn.classList.add('d-none');
                 nextLessonBtn.classList.remove('d-none');
+
+                // Add button to go to Matching Lesson
+                const matchBtn = document.createElement('button');
+                matchBtn.className = 'btn btn-warning mt-3';
+                matchBtn.textContent = 'Go to Matching Lesson';
+                matchBtn.onclick = function() {
+                    window.location.href = 'Matching_Lesson.php';
+                };
+                feedbackElem.appendChild(matchBtn);
             } else {
                 loadCurrentWord();
                 nextBtn.classList.add('d-none');
