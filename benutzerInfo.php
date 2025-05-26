@@ -201,14 +201,68 @@ if($result->num_rows > 0) {
                             <div class="p-3 rounded-4 shadow-sm d-flex flex-column align-items-center" style="background: linear-gradient(90deg, #b2f7c1 0%, #e0eafc 100%);">
                                 <i class="bi bi-check-circle text-success fs-1 mb-2"></i>
                                 <span class="fw-bold text-success d-block text-center">Abgeschlossene Lektionen</span>
-                                <span class="fs-4 text-center"><?= htmlspecialchars($lessons_completed); ?></span>
+                                <span class="fs-4 text-center">
+                                    <?php 
+                                        $servername = "localhost";
+                                        $username = "root";
+                                        $password = "root";
+                                        $dbname = "Triolingo";
+
+                                        $conn = new mysqli($servername, $username, $password, $dbname);
+                                        if ($conn->connect_error) {
+                                            die("Verbindung zur Datenbank fehlgeschlagen: " . $conn->connect_error);
+                                        }
+
+                                        // Einheiten aus der Datenbank abrufen
+                                        $sql = "SELECT count(LID) FROM Lesson Where UID = ?";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->bind_param("i", $_SESSION['UserID']);
+
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_row();
+                                            echo $row[0];
+                                        } else {
+                                            echo 0;
+                                        }
+
+                                    ?>
+                                </span>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="p-3 rounded-4 shadow-sm d-flex flex-column align-items-center" style="background: linear-gradient(90deg, #b2f7c1 0%, #e0eafc 100%);">
                                 <i class="bi bi-book text-success fs-1 mb-2"></i>
                                 <span class="fw-bold text-success d-block text-center">Gelernte Vokabeln</span>
-                                <span class="fs-4 text-center"><?= htmlspecialchars($words_learned); ?></span>
+                                <span class="fs-4 text-center">
+                                    <?php 
+                                        $servername = "localhost";
+                                        $username = "root";
+                                        $password = "root";
+                                        $dbname = "Triolingo";
+
+                                        $conn = new mysqli($servername, $username, $password, $dbname);
+                                        if ($conn->connect_error) {
+                                            die("Verbindung zur Datenbank fehlgeschlagen: " . $conn->connect_error);
+                                        }
+
+                                        // Einheiten aus der Datenbank abrufen
+                                        $sql = "SELECT count(LID) FROM Level Where UID = ? and Level > 0";
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->bind_param("i", $_SESSION['UserID']);
+
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        if ($result->num_rows > 0) {
+                                            $row = $result->fetch_row();
+                                            echo $row[0];
+                                        } else {
+                                            echo 0;
+                                        }
+
+                                    ?>
+                                </span>
                             </div>
                         </div>
                     </div>

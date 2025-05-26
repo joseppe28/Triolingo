@@ -340,7 +340,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             }
         });
         
-        // Navigation button handlers
         nextLessonBtn.addEventListener('click', function() {
             window.location.href = 'completeLesson.php';
         });
@@ -349,7 +348,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             window.location.href = 'Main.php';
         });
         
-        // Functions
         function loadCurrentWord() {
             if (!vocabList || vocabList.length === 0) {
                 console.error("Vocab list is empty!");
@@ -373,7 +371,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 lives = data.lives;
                 livesCount.textContent = lives;
                 
-                // Check if lives are exhausted
                 if (lives <= 0) {
                     nextBtn.classList.add('d-none');
                     mainMenuBtn.classList.remove('d-none');
