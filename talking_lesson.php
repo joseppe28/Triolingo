@@ -143,6 +143,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         let recordedBlob = null;
         let selectedVoice = null;
         let voices = [];
+        let tries = 0;
         
         // DOM elements
         const currentWord = document.getElementById('current-word');
@@ -234,6 +235,8 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 
                 feedbackElem.style.display = 'block';
                 
+                tries++;
+
                 if (similarity >= 0.6) {
                     feedbackElem.innerHTML = '<div class="alert alert-success">Great job! Your pronunciation sounds good.</div>';
                     updateVocabLevel(vocabList[currentIndex].vocab, true);
@@ -243,11 +246,12 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     updateVocabLevel(vocabList[currentIndex].vocab, false);
                     
                     // Remove life only for very poor attempts
-                    if (similarity < 0.3) {
+                    if (similarity < 0.3 && tries >= 3) {
                         removeLife();
                     }
-                    
-                    nextBtn.classList.remove('d-none');
+                    if(tries>= 3) {
+                        nextBtn.classList.remove('d-none');
+                    }
                 }
             };
             
@@ -317,6 +321,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         nextBtn.addEventListener('click', function() {
             currentIndex = (currentIndex + 1) % vocabList.length;
             completedWords++;
+            tries = 0; // Reset tries after removing life
             
             if (completedWords >= vocabList.length) {
                 // All words completed
@@ -341,6 +346,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         });
         
         nextLessonBtn.addEventListener('click', function() {
+            micBtn.classList.remove('recording');
             window.location.href = 'completeLesson.php';
         });
         
