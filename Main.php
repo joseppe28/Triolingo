@@ -211,6 +211,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             ['vocab_count' => 10, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
         ];
         ?>
+        
         <div class="main-content-center">
             <div class="mb-5">
                 <h2 class="fw-bold mt-2 mb-4"

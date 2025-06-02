@@ -1,4 +1,5 @@
 <?php
+// filepath: c:\xampp\htdocs\Triolingo\Triolingo\karteiKartenListe.php
 session_start();
 
 // Überprüfen, ob der Benutzer eingeloggt ist
@@ -27,7 +28,7 @@ if ($conn->connect_error) {
 }
 
 // Vokabeln für die Einheit abrufen
-$sql = "SELECT d.Wort AS Deutsch, e.Wort AS Englisch 
+$sql = "SELECT v.VID, d.Wort AS Deutsch, e.Wort AS Englisch 
         FROM Vocab v
         JOIN Deutsch_Vocab d ON v.DID = d.DID
         JOIN Englisch_Vocab e ON v.EID = e.EID
@@ -36,6 +37,25 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $einheit_id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Anzahl der Vokabeln zählen
+$vocab_count = $result->num_rows;
+
+// Vokabelliste für die Session erstellen
+$vocabList = [];
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $vocabList[] = [
+            'vocab' => $row['Deutsch'],
+            'translation' => $row['Englisch'],
+            'level' => 1, // Default level
+            'VID' => $row['VID']
+        ];
+    }
+}
+
+// Vokabelliste in der Session speichern
+$_SESSION['vocabList'] = $vocabList;
 ?>
 
 <!DOCTYPE html>
@@ -82,6 +102,15 @@ $result = $stmt->get_result();
         .list-group-item:hover {
             background: #f0f4f8;
         }
+        .main-content-center {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
         .sidebar-toggle-btn {
             position: fixed;
             top: 24px;
@@ -99,15 +128,6 @@ $result = $stmt->get_result();
         .sidebar-toggle-btn:focus {
             outline: none;
             box-shadow: 0 0 0 2px #0d6efd33;
-        }
-        .main-content-center {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 80px;
-            padding-bottom: 40px;
         }
         .sticky-header {
             position: fixed;
@@ -191,10 +211,57 @@ $result = $stmt->get_result();
             gap: 1.2rem;
             width: 100%;
         }
+        /* Exercise Button Styles - similar to lesson-card-btn in Main.php */
+        .exercise-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 500px;
+        }
+        .exercise-btn {
+            width: 100%;
+            min-height: 70px;
+            font-size: 1.3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            color: #222;
+            font-weight: 600;
+            border: none;
+            transition: transform 0.13s, box-shadow 0.13s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem;
+            padding-left: 2rem;
+            text-decoration: none;
+        }
+        .exercise-btn:hover, .exercise-btn:focus {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            color: #0d6efd;
+            text-decoration: none;
+        }
+        .exercise-btn-karteikarten {
+            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+        }
+        .exercise-btn-writing {
+            background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+        }
+        .exercise-btn-matching {
+            background: linear-gradient(90deg, #84fab0 0%, #8fd3f4 100%);
+        }
+        .exercise-btn-talking {
+            background: linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
         @media (max-width: 600px) {
             .flashcard-list { padding: 0 0.2rem; }
             .flashcard { flex-direction: column; align-items: center; gap: 0.5rem; padding: 0.7rem 0.4rem; }
             .flashcard-content { flex-direction: column; align-items: center; gap: 0.2rem; }
+            .exercise-btn { padding-left: 1rem; font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -226,17 +293,42 @@ $result = $stmt->get_result();
             </div>
         </div>
 
-        <!-- Sticky Überschrift -->
-        <div class="sticky-header">
-            <h2><i class="bi bi-journal-text me-2"></i>Karteikarten</h2>
-        </div>
-
-        <!-- Hauptinhalt -->
         <div class="main-content-center">
-            <div style="height: 70px;"></div> <!-- Platzhalter für sticky header -->
+            <h2 class="fw-bold mb-4"
+                style="letter-spacing:1px; font-family: 'Pacifico', cursive; font-size:2.5rem;">
+                Übungen für Einheit <?= $einheit_id ?>
+            </h2>
+
+            <!-- Exercise Buttons -->
+            <div class="exercise-buttons">
+                <button onclick="redirectToExercise('karteiKarten')" class="exercise-btn exercise-btn-karteikarten">
+                    <i class="bi bi-card-text me-3 fs-3"></i>
+                    Karteikarten üben
+                </button>
+                
+                <button onclick="redirectToExercise('writing')" class="exercise-btn exercise-btn-writing">
+                    <i class="bi bi-pencil-fill me-3 fs-3"></i>
+                    Schreib-Übung
+                </button>
+                
+                <button onclick="redirectToExercise('matching')" class="exercise-btn exercise-btn-matching">
+                    <i class="bi bi-grid-3x3-gap me-3 fs-3"></i>
+                    Matching-Übung
+                </button>
+                
+                <button onclick="redirectToExercise('talking')" class="exercise-btn exercise-btn-talking">
+                    <i class="bi bi-mic-fill me-3 fs-3"></i>
+                    Aussprache-Übung
+                </button>
+            </div>
+
+            <!-- Vokabeln Liste -->
+            <h3 class="mb-3 mt-4">Vokabelliste (<?= $vocab_count ?> Einträge)</h3>
             <div class="flashcard-list">
                 <?php
                 if ($result->num_rows > 0) {
+                    // Reset result pointer
+                    mysqli_data_seek($result, 0);
                     while ($row = $result->fetch_assoc()) {
                         echo '<div class="flashcard">';
                         echo '<div class="flashcard-content">';
@@ -266,6 +358,56 @@ $result = $stmt->get_result();
                 toggleBtn.style.display = '';
             });
         });
+
+        // Function to redirect to exercise pages with POST data
+        function redirectToExercise(type) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            
+            // Set the appropriate target page based on exercise type
+            switch(type) {
+                case 'karteiKarten':
+                    form.action = 'karteiKarten.php';
+                    break;
+                case 'writing':
+                    form.action = 'Writing_Lesson.php';
+                    break;
+                case 'matching':
+                    form.action = 'Matching_Lesson.php';
+                    break;
+                case 'talking':
+                    form.action = 'talking_lesson.php';
+                    break;
+                default:
+                    form.action = 'karteiKarten.php';
+            }
+            
+            form.style.display = 'none';
+            
+            // Add einheit parameter
+            const einheitInput = document.createElement('input');
+            einheitInput.type = 'hidden';
+            einheitInput.name = 'einheit';
+            einheitInput.value = '<?= $einheit_id ?>';
+            form.appendChild(einheitInput);
+            
+            // Add vocab_count parameter
+            const vocabCountInput = document.createElement('input');
+            vocabCountInput.type = 'hidden';
+            vocabCountInput.name = 'vocab_count';
+            vocabCountInput.value = '<?= $vocab_count ?>';
+            form.appendChild(vocabCountInput);
+            
+            // Add a dummy lesson ID parameter (1 for exercise practices)
+            const lessonInput = document.createElement('input');
+            lessonInput.type = 'hidden';
+            lessonInput.name = 'lesson';
+            lessonInput.value = '1';
+            form.appendChild(lessonInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
     </script>
 </body>
 </html>

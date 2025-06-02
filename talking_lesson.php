@@ -388,7 +388,9 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         nextBtn.addEventListener('click', function() {
             currentIndex = (currentIndex + 1) % vocabList.length;
             completedWords++;
-            tries = 0;
+            tries = 0; // Reset tries after removing life
+            micBtn.classList.remove('recording');
+            
             if (completedWords >= vocabList.length) {
                 feedbackElem.innerHTML = '<div class="alert alert-success">Congratulations! You\'ve completed all words!</div>';
                 feedbackElem.style.display = 'block';
@@ -410,7 +412,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         });
 
         nextLessonBtn.addEventListener('click', function() {
-            micBtn.classList.remove('recording');
             window.location.href = 'completeLesson.php';
         });
 
