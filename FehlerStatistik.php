@@ -236,34 +236,36 @@ if ($uid) {
         </div>
 
         <!-- Sticky Überschrift -->
-        <div class="sticky-header">
-            <h2><i class="bi me-2"></i>Fehlerstatistik</h2>
-        </div>
-
-        <!-- Hauptinhalt -->
         <div class="main-content-center">
-            <div style="height: 70px;"></div> <!-- Platzhalter für sticky header -->
-            <?php if (count($fehler) > 0): ?>
-                <div class="mb-3 text-center">
-                    <span class="fw-bold text-danger"><i class="bi bi-bug-fill"></i> Wörter mit mindestens 3 Fehlerpunkten</span>
-                </div>
-                <div class="error-list">
-                    <?php foreach ($fehler as $f): ?>
-                        <div class="error-word-card">
-                            <div class="error-word-info">
-                                <span class="error-word-de"><?= htmlspecialchars($f['Deutsch']) ?></span>
-                                <span class="error-word-en"><?= htmlspecialchars($f['Englisch']) ?></span>
+            <h2 class="fw-bold"
+                style="letter-spacing:1px; font-family: 'Pacifico', cursive; font-size:2.5rem;">
+                Fehler Statistik
+            </h2>
+
+            <!-- Hauptinhalt -->
+            <div class="main-content-center">
+                <?php if (count($fehler) > 0): ?>
+                    <div class="mb-3 text-center">
+                        <span class="fw-bold text-danger"><i class="bi bi-bug-fill"></i> Wörter mit mindestens 3 Fehlerpunkten</span>
+                    </div>
+                    <div class="error-list">
+                        <?php foreach ($fehler as $f): ?>
+                            <div class="error-word-card">
+                                <div class="error-word-info">
+                                    <span class="error-word-de"><?= htmlspecialchars($f['Deutsch']) ?></span>
+                                    <span class="error-word-en"><?= htmlspecialchars($f['Englisch']) ?></span>
+                                </div>
+                                <span class="error-word-count"><?= (int)$f['FehlerAnzahl'] ?></span>
                             </div>
-                            <span class="error-word-count"><?= (int)$f['FehlerAnzahl'] ?></span>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="no-errors-card text-center mx-auto">
-                    <i class="bi bi-emoji-laughing fs-1 text-success mb-2"></i><br>
-                    <span class="fw-bold">Super! Du hast keine Wörter mit 3 oder mehr Fehlerpunkten.</span>
-                </div>
-            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                <?php else: ?>
+                    <div class="no-errors-card text-center mx-auto">
+                        <i class="bi bi-emoji-laughing fs-1 text-success mb-2"></i><br>
+                        <span class="fw-bold">Super! Du hast keine Wörter mit 3 oder mehr Fehlerpunkten.</span>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

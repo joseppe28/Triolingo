@@ -226,30 +226,33 @@ $result = $stmt->get_result();
             </div>
         </div>
 
-        <!-- Sticky Überschrift -->
-        <div class="sticky-header">
-            <h2><i class="bi bi-journal-text me-2"></i>Karteikarten</h2>
-        </div>
 
-        <!-- Hauptinhalt -->
+
         <div class="main-content-center">
-            <div style="height: 70px;"></div> <!-- Platzhalter für sticky header -->
-            <div class="flashcard-list">
-                <?php
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        echo '<div class="flashcard">';
-                        echo '<div class="flashcard-content">';
-                        echo '<span class="word">' . htmlspecialchars($row['Deutsch']) . '</span>';
-                        echo '<span class="icon"><i class="bi bi-card-text"></i></span>';
-                        echo '<span class="word">' . htmlspecialchars($row['Englisch']) . '</span>';
-                        echo '</div>';
-                        echo '</div>';
+            <h2 class="fw-bold"
+                style="letter-spacing:1px; font-family: 'Pacifico', cursive; font-size:2.5rem;">
+                Karteikarten
+            </h2>
+
+            <!-- Hauptinhalt -->
+            <div class="main-content-center">
+                <div class="flashcard-list">
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<div class="flashcard">';
+                            echo '<div class="flashcard-content">';
+                            echo '<span class="word">' . htmlspecialchars($row['Deutsch']) . '</span>';
+                            echo '<span class="icon"><i class="bi bi-card-text"></i></span>';
+                            echo '<span class="word">' . htmlspecialchars($row['Englisch']) . '</span>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                    } else {
+                        echo '<div class="alert alert-info text-center w-100">Keine Karteikarten gefunden.</div>';
                     }
-                } else {
-                    echo '<div class="alert alert-info text-center w-100">Keine Karteikarten gefunden.</div>';
-                }
-                ?>
+                    ?>
+                </div>
             </div>
         </div>
     </div>
