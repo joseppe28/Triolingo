@@ -1,28 +1,21 @@
 <?php
+session_start();
 
-Session_start(); // Start the session
-// db_connection.php
-$_SESSION['Lives'] = 3; // Initialize lives if not already set
+$servername = "localhost";
+$username = "root";
+$password = "root";
+$dbname = "Triolingo";
 
-$servername = "localhost"; // Replace with your server name
-$username = "root";        // Replace with your database username
-$password = "root";            // Replace with your database password
-$dbname = "Triolingo"; // Replace with your database name
-
-// Create a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 // Fetch random vocab from the database
-$einheit = $_POST["einheit"]; // The selected Einheit ID
-$vocab_count = $_POST["vocab_count"]; // Number of vocab to fetch
-$_SESSION['lesson'] = $_POST["lesson"]; // The selected lesson ID
+$einheit = $_POST["einheit"];
+$vocab_count = $_POST["vocab_count"];
+$_SESSION['lesson'] = $_POST["lesson"];
 
-// First get all vocabulary for this Einheit and join with level data
 $query = "SELECT v.*, IFNULL(l.Level, 0) as Level 
           FROM vocab v 
           LEFT JOIN level l ON v.VID = l.VID AND l.UID = ? 
@@ -31,9 +24,8 @@ $query = "SELECT v.*, IFNULL(l.Level, 0) as Level
           LIMIT ?";
 
 $stmt = $conn->prepare($query);
-$userid = $_SESSION['UserID'] ?? 0; // Get user ID from session or default to 0
+$userid = $_SESSION['UserID'] ?? 0;
 if ($userid == 0) {
-    // Handle case where user ID is not set
     echo "User ID not set.";
     exit();
 }
@@ -52,7 +44,7 @@ if ($result->num_rows > 0) {
         $resultDE = $stmtDE->get_result();
         $germanWord = $resultDE->fetch_assoc()['Wort'];
         
-        // Get the English word from English_vocab table
+        // Get the English word from Englisch_Vocab table
         $queryEN = "SELECT Wort FROM Englisch_Vocab WHERE EID = ?";
         $stmtEN = $conn->prepare($queryEN);
         $stmtEN->bind_param("i", $row['EID']);
@@ -60,7 +52,6 @@ if ($result->num_rows > 0) {
         $resultEN = $stmtEN->get_result();
         $englishWord = $resultEN->fetch_assoc()['Wort'];
         
-        // Store both words and the level in the vocab list
         $vocabList[] = [
             'vocab' => $germanWord,
             'translation' => $englishWord,
@@ -70,42 +61,95 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Convert PHP array to JSON for JavaScript
 $vocabListJson = json_encode($vocabList);
 $_SESSION['vocabList'] = $vocabList;
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vocab Cards</title>
+    <title>Karteikarten</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        .main-content-center {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            z-index: 1050;
+            background: transparent;
+            box-shadow: none;
+            text-align: center;
+            padding: 0;
+        }
+        .sticky-header h2 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 0;
+            margin-top: 32px;
+            color: #222;
+            background: transparent;
+            padding: 0;
+        }
         .card-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            width: 100%;
+            margin-top: 40px;
+        }
+        .progress {
+            height: 22px;
+            width: 340px;
+            max-width: 90vw;
+            margin-bottom: 24px;
         }
         .card {
-            width: 300px;
-            height: 200px;
+            width: 340px;
+            height: 180px;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+            color: #222;
+            font-weight: 600;
+            border: none;
+            margin-bottom: 24px;
+            transition: transform 0.13s, box-shadow 0.13s, background 0.13s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             perspective: 1000px;
-            margin-bottom: 20px;
         }
         .card-inner {
-            position: relative;
             width: 100%;
             height: 100%;
             text-align: center;
             transition: transform 0.6s;
             transform-style: preserve-3d;
+            position: relative;
         }
-        .card:hover .card-inner {
+        .card.flipped .card-inner {
             transform: rotateY(180deg);
         }
         .card-front, .card-back {
@@ -114,30 +158,72 @@ $_SESSION['vocabList'] = $vocabList;
             height: 100%;
             backface-visibility: hidden;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+            border-radius: 1.5rem;
+            background: transparent;
+            box-shadow: none;
+        }
+        .card-front h3, .card-back h3 {
+            font-family: 'Arial', cursive;
+            font-size: 2rem;
+            color: #0d6efd;
+            margin-bottom: 0;
         }
         .card-back {
             transform: rotateY(180deg);
-            background-color: #f8f9fa;
+            background: transparent;
         }
         .navigation-buttons {
             display: flex;
             justify-content: center;
             gap: 20px;
+            margin-top: 10px;
         }
         .nav-button {
             padding: 10px 15px;
             font-size: 20px;
+            border-radius: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            border: none;
+            transition: background 0.13s, color 0.13s;
+        }
+        .nav-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #0d6efd33;
+        }
+        #finish-btn {
+            font-size: 1.1rem;
+            padding: 10px 22px;
+        }
+        .flip-hint {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .main-content-center { padding-top: 70px; }
+            .card { width: 98vw; min-width: 0; height: 130px; }
+            .progress { width: 98vw; }
+            .card-front h3, .card-back h3 { font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="sticky-header">
+        <h2><i class="bi bi-journal-text me-2"></i>Karteikarten</h2>
+    </div>
+    <div class="main-content-center">
         <div class="card-container">
-            <div class="card">
+            <div class="flip-hint">Klicke auf die Karte, um die Übersetzung zu sehen</div>
+            <div class="progress mb-4">
+                <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="1" aria-valuemin="1" aria-valuemax="100">
+                    <span id="progress-text" style="color: #fff; font-weight: 600;"></span>
+                </div>
+            </div>
+            <div class="card" id="flashcard">
                 <div class="card-inner">
                     <div class="card-front">
                         <h3 id="vocab-front"></h3>
@@ -147,7 +233,6 @@ $_SESSION['vocabList'] = $vocabList;
                     </div>
                 </div>
             </div>
-            
             <div class="navigation-buttons">
                 <button id="prev-btn" class="btn btn-primary nav-button">
                     <i class="bi bi-arrow-left"></i>
@@ -161,20 +246,25 @@ $_SESSION['vocabList'] = $vocabList;
             </div>
         </div>
     </div>
-
     <script>
-        // Get vocab list from PHP
         const vocabList = <?php echo $vocabListJson; ?>;
         let currentIndex = 0;
-        
-        // Function to update card content
+        let isFlipped = false;
+
         function updateCard() {
             document.getElementById('vocab-front').textContent = vocabList[currentIndex].vocab;
             document.getElementById('vocab-back').textContent = vocabList[currentIndex].translation;
-            
-            // Update navigation buttons
+            document.getElementById('flashcard').classList.remove('flipped');
+            isFlipped = false;
+
             document.getElementById('prev-btn').disabled = (currentIndex === 0);
-            
+
+            // Fortschrittsbalken aktualisieren
+            const progress = Math.round(((currentIndex + 1) / vocabList.length) * 100);
+            document.getElementById('progress-bar').style.width = progress + "%";
+            document.getElementById('progress-bar').setAttribute('aria-valuenow', progress);
+            document.getElementById('progress-text').textContent = (currentIndex + 1) + " / " + vocabList.length;
+
             if (currentIndex === vocabList.length - 1) {
                 document.getElementById('next-btn').style.display = 'none';
                 document.getElementById('finish-btn').style.display = 'inline-block';
@@ -183,23 +273,30 @@ $_SESSION['vocabList'] = $vocabList;
                 document.getElementById('finish-btn').style.display = 'none';
             }
         }
-        
-        // Event listeners for navigation
+
         document.getElementById('prev-btn').addEventListener('click', function() {
             if (currentIndex > 0) {
                 currentIndex--;
                 updateCard();
             }
         });
-        
+
         document.getElementById('next-btn').addEventListener('click', function() {
             if (currentIndex < vocabList.length - 1) {
                 currentIndex++;
                 updateCard();
             }
         });
-        
-        // Initialize the card
+
+        document.getElementById('flashcard').addEventListener('click', function() {
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                this.classList.add('flipped');
+            } else {
+                this.classList.remove('flipped');
+            }
+        });
+
         window.onload = function() {
             if (vocabList.length > 0) {
                 updateCard();
@@ -210,3 +307,7 @@ $_SESSION['vocabList'] = $vocabList;
     </script>
 </body>
 </html>
+<?php
+$stmt->close();
+$conn->close();
+?>
