@@ -208,16 +208,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
         } else {
             // Fallback: falls keine Lessons in der Session, Standard-Lessons initialisieren
             $lessons = [
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 2, 'label' => 'Lesson 2'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 3, 'label' => 'Lesson 3'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 4, 'label' => 'Lesson 4'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 5, 'label' => 'Lesson 5'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 6, 'label' => 'Lesson 6'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 7, 'label' => 'Lesson 7'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 8, 'label' => 'Lesson 8'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 9, 'label' => 'Lesson 9'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1']
             ];
             $_SESSION['lessons'] = $lessons;
         }
