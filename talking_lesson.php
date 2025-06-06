@@ -2,6 +2,11 @@
 // filepath: c:\xampp\htdocs\Triolingo\Triolingo\talking_lesson.php
 session_start();
 
+// Ensure we have a prev_page to return to, default to Main.php if not set
+if (!isset($_SESSION['prev_page'])) {
+    $_SESSION['prev_page'] = 'Main.php';
+}
+
 if(!isset($_SESSION['Lives'])) {
     $_SESSION['Lives'] = 3; // Initialize lives if not already set
 }
@@ -17,6 +22,8 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         ['vocab' => 'Schule', 'translation' => 'school', 'level' => 1]
     ];
 }
+
+$isLesson = isset($_SESSION['is_lesson']) ? $_SESSION['is_lesson'] : false;
 
 // Debug output
 // echo "<pre>"; print_r($_SESSION['vocabList']); echo "</pre>";
@@ -115,6 +122,11 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             color: #e74a3b;
             font-size: 1.5rem;
         }
+        .lives-bar .bi-heart {
+            color: #e74a3b;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
         .progress {
             height: 22px;
             width: 340px;
@@ -180,15 +192,51 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             outline: none;
             box-shadow: 0 0 0 2px #0d6efd33;
         }
+        /* Close button styling */
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: white;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            border: none;
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 1100;
+        }
+        .close-btn:hover, .close-btn:focus {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+            color: #dc3545;
+        }
         @media (max-width: 600px) {
             .main-content-center { padding-top: 70px; }
             .talking-card { width: 98vw; min-width: 0; padding: 1.2rem 0.5rem 1rem 0.5rem; }
             .progress { width: 98vw; }
             .talking-card .vocab-word { font-size: 1.2rem; }
+            .close-btn { 
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Close Button -->
+    <button id="close-btn" class="close-btn" title="Zurück zur vorherigen Seite">
+        <i class="bi bi-x-lg"></i>
+    </button>
+
     <div class="sticky-header">
         <h2><i class="bi bi-mic me-2"></i>Talking Practice</h2>
     </div>
@@ -199,7 +247,15 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     <span id="progress-text" style="color: #fff; font-weight: 600;"></span>
                 </div>
             </div>
-            <div class="lives-bar" id="lives-bar"></div>
+            
+            <?php if ($isLesson): ?>
+            <!-- Only show lives if this is a lesson -->
+            <div class="text-center mb-3">
+                <p class="text-center text-danger fw-bold">Lives Remaining: <span id="lives-count"><?= $_SESSION['Lives'] ?></span></p>
+                <div class="lives-bar" id="lives-bar"></div>
+            </div>
+            <?php endif; ?>
+            
             <div class="talking-card shadow">
                 <div class="vocab-word" id="current-word"></div>
                 <div class="hint-text">Listen to the pronunciation, then try to say the word</div>
@@ -217,7 +273,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             <div class="navigation-buttons">
                 <button id="next-btn" class="btn btn-primary nav-button d-none">Next Word</button>
                 <button id="next-lesson-btn" class="btn btn-success nav-button d-none">Go to Next Lesson</button>
-                <button id="main-menu-btn" class="btn btn-danger nav-button d-none">Go to Main Menu</button>
+                <button id="return-btn" class="btn btn-danger nav-button d-none">Return to Main Menu</button>
             </div>
         </div>
     </div>
@@ -237,6 +293,9 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         let voices = [];
         let tries = 0;
 
+        const isLesson = <?= $isLesson ? 'true' : 'false' ?>;
+        const prevPage = "<?= $_SESSION['prev_page'] ?>";
+
         // DOM elements
         const currentWord = document.getElementById('current-word');
         const audioBtn = document.getElementById('audio-btn');
@@ -245,10 +304,11 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         const feedbackElem = document.getElementById('feedback');
         const nextBtn = document.getElementById('next-btn');
         const nextLessonBtn = document.getElementById('next-lesson-btn');
-        const mainMenuBtn = document.getElementById('main-menu-btn');
+        const returnBtn = document.getElementById('return-btn');
         const livesBar = document.getElementById('lives-bar');
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
+        const closeBtn = document.getElementById('close-btn');
 
         // Progress bar update
         function updateProgressBar() {
@@ -258,8 +318,10 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             progressText.textContent = (currentIndex + 1) + " / " + vocabList.length;
         }
 
-        // Lives bar update
+        // Lives bar update - only if this is a lesson
         function updateLivesBar() {
+            if (!isLesson || !livesBar) return;
+            
             livesBar.innerHTML = '';
             for (let i = 0; i < lives; i++) {
                 livesBar.innerHTML += '<i class="bi bi-heart-fill"></i>';
@@ -268,6 +330,11 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 livesBar.innerHTML += '<i class="bi bi-heart" style="color:#e74a3b;font-size:1.5rem;"></i>';
             }
         }
+
+        // Close button event handler
+        closeBtn.addEventListener('click', function() {
+            window.location.href = prevPage;
+        });
 
         // Initialize speech synthesis
         if ('speechSynthesis' in window) {
@@ -292,7 +359,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             recognition.continuous = false;
             recognition.lang = 'en-US';
             recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
+            recognition.maxAlternatives = 3;
 
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(stream => {
@@ -318,6 +385,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                     feedbackElem.style.display = 'block';
                 });
 
+            // In the recognition.onresult handler, always show the next button after a correct answer or after 3 tries
             recognition.onresult = function(event) {
                 const speechResult = event.results[0][0].transcript.toLowerCase();
                 const correctWord = vocabList[currentIndex].translation.toLowerCase();
@@ -327,14 +395,15 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 if (similarity >= 0.6) {
                     feedbackElem.innerHTML = '<div class="alert alert-success">Great job! Your pronunciation sounds good.</div>';
                     updateVocabLevel(vocabList[currentIndex].vocab, true);
-                    nextBtn.classList.remove('d-none');
+                    nextBtn.classList.remove('d-none'); // Always show next button after correct
                 } else {
                     feedbackElem.innerHTML = '<div class="alert alert-danger">Not quite right. Try again or press Next to continue.</div>';
+                    feedbackElem.innerHTML = 'Recognized: "' + speechResult + '"<br>' + feedbackElem.innerHTML;
                     updateVocabLevel(vocabList[currentIndex].vocab, false);
-                    if (similarity < 0.3 && tries >= 3) {
+                    if (similarity < 0.3 && tries >= 3 && isLesson) {
                         removeLife();
                     }
-                    if(tries>= 3) {
+                    if (tries >= 3) {
                         nextBtn.classList.remove('d-none');
                     }
                 }
@@ -388,35 +457,36 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         nextBtn.addEventListener('click', function() {
             currentIndex = (currentIndex + 1) % vocabList.length;
             completedWords++;
-            tries = 0; // Reset tries after removing life
+            tries = 0; // Reset tries after moving to next word
             micBtn.classList.remove('recording');
             
             if (completedWords >= vocabList.length) {
                 feedbackElem.innerHTML = '<div class="alert alert-success">Congratulations! You\'ve completed all words!</div>';
                 feedbackElem.style.display = 'block';
                 nextBtn.classList.add('d-none');
-                nextLessonBtn.classList.remove('d-none');
-                // Match-Button mittig und in einer anderen Farbe (z.B. blau)
-                const matchBtn = document.createElement('button');
-                matchBtn.className = 'btn btn-primary mt-3 d-block mx-auto'; // btn-primary für blau, mx-auto für zentriert
-                matchBtn.textContent = 'Go to Matching Lesson';
-                matchBtn.onclick = function() {
-                    window.location.href = 'Matching_Lesson.php';
-                };
-                feedbackElem.appendChild(matchBtn);
+                
+                if (isLesson) {
+                    // If this is a lesson, show "Go to Next Lesson" button to go to Matching_Lesson.php
+                    nextLessonBtn.textContent = "Go to Next Exercise";
+                    nextLessonBtn.classList.remove('d-none');
+                    
+                    nextLessonBtn.addEventListener('click', function() {
+                        window.location.href = 'Matching_Lesson.php';
+                    });
+                } else {
+                    // If this is not a lesson, show "Return to Previous Page" button
+                    nextLessonBtn.textContent = "Return to Previous Page";
+                    nextLessonBtn.classList.remove('d-none');
+                    
+                    nextLessonBtn.addEventListener('click', function() {
+                        window.location.href = prevPage;
+                    });
+                }
             } else {
                 loadCurrentWord();
                 nextBtn.classList.add('d-none');
                 feedbackElem.style.display = 'none';
             }
-        });
-
-        nextLessonBtn.addEventListener('click', function() {
-            window.location.href = 'completeLesson.php';
-        });
-
-        mainMenuBtn.addEventListener('click', function() {
-            window.location.href = 'Main.php';
         });
 
         function loadCurrentWord() {
@@ -431,17 +501,28 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         }
 
         function removeLife() {
+            // Only remove lives if this is a lesson
+            if (!isLesson) return;
+            
             fetch('remove_life.php', { method: 'POST' })
             .then(response => response.json())
             .then(data => {
                 lives = data.lives;
+                if (document.getElementById('lives-count')) {
+                    document.getElementById('lives-count').textContent = lives;
+                }
                 updateLivesBar();
                 if (lives <= 0) {
                     nextBtn.classList.add('d-none');
-                    mainMenuBtn.classList.remove('d-none');
+                    returnBtn.classList.remove('d-none');
+                    returnBtn.textContent = "Return to Main Menu";
                     micBtn.disabled = true;
                     feedbackElem.innerHTML = '<div class="alert alert-danger">You have lost all your lives!</div>';
                     feedbackElem.style.display = 'block';
+                    
+                    returnBtn.addEventListener('click', function() {
+                        window.location.href = 'Main.php';
+                    });
                 }
             });
         }

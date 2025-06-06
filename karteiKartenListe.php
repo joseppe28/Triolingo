@@ -2,6 +2,8 @@
 // filepath: c:\xampp\htdocs\Triolingo\Triolingo\karteiKartenListe.php
 session_start();
 
+
+
 // Überprüfen, ob der Benutzer eingeloggt ist
 if (!isset($_SESSION['username'])) {
     header("Location: Login.php");
@@ -14,7 +16,11 @@ if (!isset($_GET['einheit_id'])) {
     exit();
 }
 
+$_SESSION['is_lesson'] = false;
+
 $einheit_id = intval($_GET['einheit_id']);
+
+$_SESSION['prev_page'] = basename($_SERVER['PHP_SELF'] . "?einheit_id=" . intval($einheit_id));
 
 // Datenbankverbindung
 $servername = "localhost";
@@ -309,11 +315,6 @@ $_SESSION['vocabList'] = $vocabList;
                 <button onclick="redirectToExercise('writing')" class="exercise-btn exercise-btn-writing">
                     <i class="bi bi-pencil-fill me-3 fs-3"></i>
                     Schreib-Übung
-                </button>
-                
-                <button onclick="redirectToExercise('matching')" class="exercise-btn exercise-btn-matching">
-                    <i class="bi bi-grid-3x3-gap me-3 fs-3"></i>
-                    Matching-Übung
                 </button>
                 
                 <button onclick="redirectToExercise('talking')" class="exercise-btn exercise-btn-talking">

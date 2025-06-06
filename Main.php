@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+$_SESSION['prev_page'] = basename($_SERVER['PHP_SELF']);
+
+$_SESSION['is_lesson'] = true;
+
 if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
     header("location: login.php");
     exit;
@@ -211,7 +215,7 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             ['vocab_count' => 10, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
         ];
         ?>
-        
+
         <div class="main-content-center">
             <div class="mb-5">
                 <h2 class="fw-bold mt-2 mb-4"
