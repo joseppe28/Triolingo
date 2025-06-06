@@ -71,10 +71,30 @@ if ($stmt->affected_rows > 0) {
     // Save the username from the request in the session
     $_SESSION['username'] = $user;
     $_SESSION['email'] = $email;
-    header("Location: Main.php");
+    $lastInsertId = $conn->insert_id;
+    if ($lastInsertId) {
+        $_SESSION['UserID'] = $lastInsertId;
+    } else {
+        $_SESSION['err'] = "Failed to retrieve user ID";
+    }
 } else {
     $_SESSION['err'] = "Registration failed";
     header("Location: error.php");
     exit();
 }
+
+$sql = "Insert Into User_Stats (UID, Lessons_Completed, Words_Learned) VALUES (?, 0, 0)";
+$stmt2 = $conn->prepare($sql);
+$stmt2->bind_param("i", $_SESSION['UserID']);
+$stmt2->execute();
+if ($stmt2->error) {
+    $_SESSION['err'] = $stmt2->error;
+    header("Location: error.php");
+} else {
+    $_SESSION['UserID'] = $conn->insert_id; // Save the user ID in the session
+}
+$stmt2->close();
+$conn->close();
+
+header("Location: Main.php");
 ?>

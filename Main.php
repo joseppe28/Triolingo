@@ -202,18 +202,25 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
         }
         $res->close();
 
-        $lessons = [
-            ['vocab_count' => 5, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1'],
-            ['vocab_count' => 3, 'einheit' => 2, 'lesson' => 2, 'label' => 'Lesson 2'],
-            ['vocab_count' => 3, 'einheit' => 2, 'lesson' => 3, 'label' => 'Lesson 3'],
-            ['vocab_count' => 4, 'einheit' => 1, 'lesson' => 4, 'label' => 'Lesson 4'],
-            ['vocab_count' => 5, 'einheit' => 1, 'lesson' => 5, 'label' => 'Lesson 5'],
-            ['vocab_count' => 6, 'einheit' => 1, 'lesson' => 6, 'label' => 'Lesson 6'],
-            ['vocab_count' => 7, 'einheit' => 1, 'lesson' => 7, 'label' => 'Lesson 7'],
-            ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 8, 'label' => 'Lesson 8'],
-            ['vocab_count' => 9, 'einheit' => 1, 'lesson' => 9, 'label' => 'Lesson 9'],
-            ['vocab_count' => 10, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
-        ];
+        // Hole Lessons nur noch aus der Session, nicht mehr überschreiben!
+        if (isset($_SESSION['lessons']) && is_array($_SESSION['lessons'])) {
+            $lessons = $_SESSION['lessons'];
+        } else {
+            // Fallback: falls keine Lessons in der Session, Standard-Lessons initialisieren
+            $lessons = [
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1'],
+                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 2, 'label' => 'Lesson 2'],
+                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 3, 'label' => 'Lesson 3'],
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 4, 'label' => 'Lesson 4'],
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 5, 'label' => 'Lesson 5'],
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 6, 'label' => 'Lesson 6'],
+                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 7, 'label' => 'Lesson 7'],
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 8, 'label' => 'Lesson 8'],
+                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 9, 'label' => 'Lesson 9'],
+                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
+            ];
+            $_SESSION['lessons'] = $lessons;
+        }
         ?>
 
         <div class="main-content-center">
@@ -224,49 +231,54 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
                 </h2>
             </div>
             
-            <div class="d-flex flex-column align-items-center gap-3">
-                <?php 
-                // First lesson should always be accessible
-                $previousLessonCompleted = true;
-                
-                foreach ($lessons as $index => $l): 
-                    $isCompleted = in_array($l['lesson'], $completedLessons);
-                    $isLocked = !$previousLessonCompleted;
+            <!-- Grid für Lessons -->
+            <div class="container">
+                <div class="row justify-content-center g-4">
+                    <?php 
+                    // First lesson should always be accessible
+                    $previousLessonCompleted = true;
                     
-                    // Set button class based on status
-                    if ($isCompleted) {
-                        $btnClass = 'lesson-card-btn completed';
-                        $icon = 'bi-check-circle-fill';
-                        $tooltipText = 'You have already completed this lesson';
-                    } elseif ($isLocked) {
-                        $btnClass = 'lesson-card-btn locked';
-                        $icon = 'bi-lock-fill';
-                        $tooltipText = 'Complete the previous lesson first';
-                    } else {
-                        $btnClass = 'lesson-card-btn';
-                        $icon = 'bi-pencil-fill';
-                        $tooltipText = '';
-                    }
-                    
-                    // Update for the next iteration
-                    $previousLessonCompleted = $isCompleted;
-                ?>
-                    <div class="position-relative tooltip-custom">
-                        <button 
-                            vocab_count="<?= $l['vocab_count']; ?>" 
-                            einheit="<?= $l['einheit']; ?>" 
-                            lesson="<?= $l['lesson']; ?>" 
-                            class="btn <?= $btnClass; ?> d-flex align-items-center"
-                            style="font-size:1.2rem;"
-                            <?= ($isCompleted || $isLocked) ? 'disabled' : ''; ?>>
-                            <i class="bi <?= $icon ?> me-3 fs-3"></i>
-                            <?= htmlspecialchars($l['label']); ?>
-                        </button>
-                        <?php if ($isCompleted || $isLocked): ?>
-                        <span class="tooltip-text"><?= $tooltipText ?></span>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
+                    foreach ($lessons as $index => $l): 
+                        $isCompleted = in_array($l['lesson'], $completedLessons);
+                        $isLocked = !$previousLessonCompleted;
+                        
+                        // Set button class based on status
+                        if ($isCompleted) {
+                            $btnClass = 'lesson-card-btn completed';
+                            $icon = 'bi-check-circle-fill';
+                            $tooltipText = 'You have already completed this lesson';
+                        } elseif ($isLocked) {
+                            $btnClass = 'lesson-card-btn locked';
+                            $icon = 'bi-lock-fill';
+                            $tooltipText = 'Complete the previous lesson first';
+                        } else {
+                            $btnClass = 'lesson-card-btn';
+                            $icon = 'bi-pencil-fill';
+                            $tooltipText = '';
+                        }
+                        
+                        // Update for the next iteration
+                        $previousLessonCompleted = $isCompleted;
+                    ?>
+                        <div class="col-12 col-sm-6 col-md-4 d-flex justify-content-center">
+                            <div class="position-relative tooltip-custom w-100">
+                                <button 
+                                    vocab_count="<?= $l['vocab_count']; ?>" 
+                                    einheit="<?= $l['einheit']; ?>" 
+                                    lesson="<?= $l['lesson']; ?>" 
+                                    class="btn <?= $btnClass; ?> d-flex align-items-center w-100"
+                                    style="font-size:1.2rem;"
+                                    <?= ($isCompleted || $isLocked) ? 'disabled' : ''; ?>>
+                                    <i class="bi <?= $icon ?> me-3 fs-3"></i>
+                                    <?= htmlspecialchars($l['label']); ?>
+                                </button>
+                                <?php if ($isCompleted || $isLocked): ?>
+                                <span class="tooltip-text"><?= $tooltipText ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
         <?php $mysqli->close(); ?>

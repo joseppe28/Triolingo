@@ -2,10 +2,7 @@
 // filepath: c:\xampp\htdocs\Triolingo\Triolingo\karteiKarten.php
 session_start();
 
-// Ensure we have a prev_page to return to, default to Main.php if not set
-if (!isset($_SESSION['prev_page'])) {
-    $_SESSION['prev_page'] = 'Main.php';
-}
+$_SESSION['Lives'] = 3; // Reset lives for the new lesson
 
 $servername = "localhost";
 $username = "root";
