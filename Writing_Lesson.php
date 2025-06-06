@@ -1,8 +1,15 @@
 <?php
+// filepath: c:\xampp\htdocs\Triolingo\Triolingo\Writing_Lesson.php
 session_start();
 
-if(!isset($_SESSION['Lives'])) {
-    $_SESSION['Lives'] = 3; // Initialize lives if not already set
+// Ensure we have a prev_page to return to, default to Main.php if not set
+if (!isset($_SESSION['prev_page'])) {
+    $_SESSION['prev_page'] = 'Main.php';
+}
+
+// Initialize lives if not already set and this is a lesson
+if (!isset($_SESSION['Lives'])) {
+    $_SESSION['Lives'] = 3;
 }
 
 // Check if vocabList exists in session, otherwise create a sample one
@@ -16,9 +23,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         ['vocab' => 'Schule', 'translation' => 'school', 'level' => 1]
     ];
 }
-
-// Debug output
-// echo "<pre>"; print_r($_SESSION['vocabList']); echo "</pre>";
 ?>
 
 <!DOCTYPE html>
@@ -83,22 +87,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             text-align: center;
             margin-bottom: 0.7rem;
         }
-        .lives-bar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            margin-bottom: 1.2rem;
-        }
-        .lives-bar .bi-heart-fill {
-            color: #e74a3b;
-            font-size: 1.5rem;
-        }
-        .lives-bar .bi-heart {
-            color: #e74a3b;
-            font-size: 1.5rem;
-            opacity: 0.3;
-        }
         .writing-progress {
             height: 22px;
             width: 340px;
@@ -125,6 +113,46 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             gap: 1rem;
             margin-top: 2rem;
         }
+        .lives-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            margin-bottom: 1.2rem;
+        }
+        .lives-bar .bi-heart-fill {
+            color: #e74a3b;
+            font-size: 1.5rem;
+        }
+        .lives-bar .bi-heart {
+            color: #e74a3b;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+        /* Close button styling */
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: white;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            border: none;
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 1100;
+        }
+        .close-btn:hover, .close-btn:focus {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+            color: #dc3545;
+        }
         @media (max-width: 700px) {
             .writing-card { padding: 1.2rem 0.2rem; }
         }
@@ -132,16 +160,35 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             .main-content-center { padding-top: 70px; }
             .writing-title { font-size: 1.2rem; }
             .writing-progress { width: 98vw; }
+            .close-btn { 
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Close Button -->
+    <button id="close-btn" class="close-btn" title="Zurück zur vorherigen Seite">
+        <i class="bi bi-x-lg"></i>
+    </button>
+
     <div class="sticky-header">
         <h2><i class="bi bi-pencil me-2"></i>Writing Practice</h2>
     </div>
     <div class="main-content-center">
         <div class="writing-card mx-auto">
-            <div class="lives-bar mb-3" id="lives-bar"></div>
+            <?php if ($_SESSION['is_lesson']): ?>
+            <!-- Only show lives if this is a lesson -->
+            <div class="text-center mb-3">
+                <p class="text-center text-danger fw-bold">Lives Remaining: <span id="lives-count"><?= $_SESSION['Lives'] ?></span></p>
+                <div class="lives-bar mb-3" id="lives-bar"></div>
+            </div>
+            <?php endif; ?>
+            
             <div class="writing-progress progress mb-4">
                 <div id="progress-bar" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="1" aria-valuemin="1" aria-valuemax="100">
                     <span id="progress-text" style="color: #fff; font-weight: 600;"></span>
@@ -164,7 +211,7 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             <div class="writing-btns">
                 <button id="action-button" class="btn btn-primary btn-lg px-4">Check</button>
                 <button id="next-lesson-btn" class="btn btn-success d-none">Go to Next Lesson</button>
-                <button id="main-menu-btn" class="btn btn-danger d-none">Go to Main Menu</button>
+                <button id="return-btn" class="btn btn-secondary d-none">Return to Previous Page</button>
             </div>
         </div>
     </div>
@@ -175,21 +222,29 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
         const vocabList = <?= json_encode($_SESSION['vocabList']) ?>;
         let currentIndex = 0;
         let isChecking = true;
-        let lives = <?= $_SESSION['Lives'] ?>;
         let completedWords = 0;
+        let lives = <?= $_SESSION['Lives'] ?>;
+        const maxLives = 3;
+        const isLesson = <?php echo json_encode($_SESSION['is_lesson'] ?? false); ?>;
+        const prevPage = <?php echo json_encode($_SESSION['prev_page']); ?>;
 
-        // Render hearts for lives
+        // Render hearts for lives if this is a lesson
+        if (isLesson) {
+            renderLivesBar();
+        }
+        
         function renderLivesBar() {
             const livesBar = document.getElementById('lives-bar');
+            if (!livesBar) return;
+            
             livesBar.innerHTML = '';
             for (let i = 0; i < lives; i++) {
                 livesBar.innerHTML += '<i class="bi bi-heart-fill"></i>';
             }
-            for (let i = lives; i < 3; i++) {
+            for (let i = lives; i < maxLives; i++) {
                 livesBar.innerHTML += '<i class="bi bi-heart"></i>';
             }
         }
-        renderLivesBar();
 
         // Fortschrittsbalken aktualisieren
         function updateProgressBar() {
@@ -212,7 +267,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             document.getElementById('german-word').textContent = currentWord.vocab;
             document.getElementById('current-index').textContent = currentIndex + 1;
             updateProgressBar();
-            renderLivesBar();
 
             // Reset interface
             document.getElementById('answer-input').value = '';
@@ -232,6 +286,24 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 if (completedWords >= vocabList.length) {
                     document.getElementById('action-button').classList.add('d-none');
                     document.getElementById('next-lesson-btn').classList.remove('d-none');
+                    
+                    // If it's a lesson, go to next lesson, otherwise return to prev page
+                    if (!isLesson) {
+                        document.getElementById('next-lesson-btn').textContent = 'Return to Previous Page';
+                        document.getElementById('next-lesson-btn').addEventListener('click', function() {
+                            window.location.href = prevPage;
+                        });
+                    } else {
+                        document.getElementById('return-btn').classList.remove('d-none');
+                        document.getElementById('next-lesson-btn').textContent = 'Go to Next Lesson';
+                        document.getElementById('next-lesson-btn').addEventListener('click', function() {
+                            window.location.href = 'completeLesson.php';
+                        });
+                        document.getElementById('return-btn').addEventListener('click', function() {
+                            window.location.href = 'Main.php';
+                        });
+                    }
+                    
                     document.getElementById('feedback').innerHTML = '<div class="alert alert-success">Congratulations! You\'ve completed all words!</div>';
                     document.getElementById('feedback').style.display = 'block';
                 } else {
@@ -250,14 +322,14 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             const userAnswer = document.getElementById('answer-input').value.trim().toLowerCase();
             const correctAnswer = vocabList[currentIndex].translation.toLowerCase();
             const feedbackElement = document.getElementById('feedback');
-            var VID = vocabList[currentIndex].VID;
+            const VID = vocabList[currentIndex].VID;
 
             document.getElementById('answer-input').disabled = true;
             feedbackElement.style.display = 'block';
 
             if (userAnswer === correctAnswer) {
                 feedbackElement.innerHTML = '<div class="alert alert-success">Correct!</div>';
-                lowerMistake(VID);
+                if (VID) lowerMistake(VID);
                 updateVocabLevel(vocabList[currentIndex].vocab, true);
             } else {
                 const similarity = calculateSimilarity(userAnswer, correctAnswer);
@@ -266,8 +338,12 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 } else {
                     feedbackElement.innerHTML = '<div class="alert alert-danger">Incorrect. The correct answer is: ' + correctAnswer + '</div>';
                     updateVocabLevel(vocabList[currentIndex].vocab, false);
-                    raiseMistake(VID);
-                    removeLife();
+                    if (VID) raiseMistake(VID);
+                    
+                    // Only reduce lives if this is a lesson
+                    if (isLesson) {
+                        removeLife();
+                    }
                 }
             }
 
@@ -275,24 +351,10 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             isChecking = false;
         }
 
-        function removeLife() {
-            fetch('remove_life.php', {
-                method: 'POST',
-            })
-            .then(response => response.json())
-            .then(data => {
-                lives = data.lives;
-                renderLivesBar();
-                if (lives <= 0) {
-                    document.getElementById('action-button').classList.add('d-none');
-                    document.getElementById('main-menu-btn').classList.remove('d-none');
-                    document.getElementById('feedback').innerHTML += '<div class="alert alert-danger mt-2">You have lost all your lives!</div>';
-                }
-            })
-            .catch(error => {
-                console.error('Error updating life:', error);
-            });
-        }
+        // Close button event handler - redirect to previous page
+        document.getElementById('close-btn').addEventListener('click', function() {
+            window.location.href = prevPage;
+        });
 
         function updateVocabLevel(germanWord, isCorrect) {
             fetch('update_vocab_level.php', {
@@ -311,13 +373,37 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             });
         }
 
-        document.getElementById('next-lesson-btn').addEventListener('click', function() {
-            window.location.href = 'completeLesson.php';
-        });
-
-        document.getElementById('main-menu-btn').addEventListener('click', function() {
-            window.location.href = 'Main.php';
-        });
+        // Function to remove life with AJAX - only if this is a lesson
+        function removeLife() {
+            if (!isLesson) return;
+            
+            fetch('remove_life.php', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                lives = data.lives;
+                if (document.getElementById('lives-count')) {
+                    document.getElementById('lives-count').textContent = lives;
+                }
+                renderLivesBar();
+                
+                // Check if lives are exhausted
+                if (lives <= 0) {
+                    document.getElementById('action-button').classList.add('d-none');
+                    document.getElementById('return-btn').classList.remove('d-none');
+                    document.getElementById('return-btn').textContent = 'Return to Main Menu';
+                    document.getElementById('return-btn').addEventListener('click', function() {
+                        window.location.href = 'Main.php';
+                    });
+                    document.getElementById('feedback').innerHTML = '<div class="alert alert-danger">You have lost all your lives!</div>';
+                    document.getElementById('feedback').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error('Error updating life:', error);
+            });
+        }
 
         function calculateSimilarity(a, b) {
             if (a.length === 0) return b.length === 0 ? 1 : 0;

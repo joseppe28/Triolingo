@@ -1,4 +1,5 @@
 <?php
+// filepath: c:\xampp\htdocs\Triolingo\Triolingo\karteiKarten.php
 session_start();
 
 $_SESSION['Lives'] = 3; // Reset lives for the new lesson
@@ -7,6 +8,8 @@ $servername = "localhost";
 $username = "root";
 $password = "root";
 $dbname = "Triolingo";
+
+$_SESSION['Lives'] = 3; // Reset lives for the session
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
@@ -205,15 +208,51 @@ $_SESSION['vocabList'] = $vocabList;
             margin-bottom: 10px;
             text-align: center;
         }
+        /* Close button styling */
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: white;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            border: none;
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 1100;
+        }
+        .close-btn:hover, .close-btn:focus {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+            color: #dc3545;
+        }
         @media (max-width: 600px) {
             .main-content-center { padding-top: 70px; }
             .card { width: 98vw; min-width: 0; height: 130px; }
             .progress { width: 98vw; }
             .card-front h3, .card-back h3 { font-size: 1.2rem; }
+            .close-btn { 
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Close Button -->
+    <button id="close-btn" class="close-btn" title="Zurück zur vorherigen Seite">
+        <i class="bi bi-x-lg"></i>
+    </button>
+
     <div class="sticky-header">
         <h2><i class="bi bi-journal-text me-2"></i>Karteikarten</h2>
     </div>
@@ -242,7 +281,7 @@ $_SESSION['vocabList'] = $vocabList;
                 <button id="next-btn" class="btn btn-primary nav-button">
                     <i class="bi bi-arrow-right"></i>
                 </button>
-                <a href="talking_lesson.php" id="finish-btn" class="btn btn-success nav-button" style="display: none;">
+                <a id="finish-btn" class="btn btn-success nav-button" style="display: none;">
                     Finish <i class="bi bi-check-lg"></i>
                 </a>
             </div>
@@ -252,6 +291,9 @@ $_SESSION['vocabList'] = $vocabList;
         const vocabList = <?php echo $vocabListJson; ?>;
         let currentIndex = 0;
         let isFlipped = false;
+        const isLesson = <?php echo json_encode($_SESSION['is_lesson'] ?? false); ?>;
+        const prevPage = <?php echo json_encode($_SESSION['prev_page']); ?>;
+
 
         function updateCard() {
             document.getElementById('vocab-front').textContent = vocabList[currentIndex].vocab;
@@ -290,6 +332,14 @@ $_SESSION['vocabList'] = $vocabList;
             }
         });
 
+        document.getElementById('finish-btn').addEventListener('click', function() {
+            if (isLesson) {
+                window.location.href = "talking_lesson.php";
+            }else {
+                window.location.href = prevPage;
+            }
+        });
+
         document.getElementById('flashcard').addEventListener('click', function() {
             isFlipped = !isFlipped;
             if (isFlipped) {
@@ -297,6 +347,11 @@ $_SESSION['vocabList'] = $vocabList;
             } else {
                 this.classList.remove('flipped');
             }
+        });
+
+        // Close button event handler - redirect to previous page
+        document.getElementById('close-btn').addEventListener('click', function() {
+            window.location.href = '<?php echo $_SESSION["prev_page"]; ?>';
         });
 
         window.onload = function() {

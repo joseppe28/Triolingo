@@ -1,5 +1,11 @@
 <?php
+// filepath: c:\xampp\htdocs\Triolingo\Triolingo\Matching_Lesson.php
 session_start();
+
+// Ensure we have a prev_page to return to, default to Main.php if not set
+if (!isset($_SESSION['prev_page'])) {
+    $_SESSION['prev_page'] = 'Main.php';
+}
 
 // Initialize lives if not already set
 if (!isset($_SESSION['Lives'])) {  // Fixed typo in variable name
@@ -141,16 +147,52 @@ shuffle($englishWords);
             gap: 1rem;
             margin-top: 2rem;
         }
+        /* Close button styling - same as in karteiKarten.php */
+        .close-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: white;
+            color: #dc3545;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            border: none;
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 1100;
+        }
+        .close-btn:hover, .close-btn:focus {
+            background-color: #f8f9fa;
+            transform: scale(1.1);
+            color: #dc3545;
+        }
         @media (max-width: 700px) {
             .matching-card { padding: 1.2rem 0.2rem; }
         }
         @media (max-width: 600px) {
             .main-content-center { padding-top: 70px; }
             .matching-title { font-size: 1.2rem; }
+            .close-btn { 
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Close Button -->
+    <button id="close-btn" class="close-btn" title="Zurück zur vorherigen Seite">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    
     <div class="sticky-header">
         <h2><i class="bi bi-link-45deg me-2"></i>Matching Practice</h2>
     </div>
@@ -190,12 +232,18 @@ shuffle($englishWords);
         const nextLessonBtn = document.getElementById('next-lesson-btn');
         const mainMenuBtn = document.getElementById('main-menu-btn');
         const livesBar = document.getElementById('lives-bar');
+        const closeBtn = document.getElementById('close-btn');
 
         let selectedGerman = null;
         let selectedEnglish = null;
         let correctCount = 0;
         let lives = <?= $_SESSION['Lives'] ?>;
         const maxLives = 3;
+
+        // Close button event handler - redirect to previous page
+        closeBtn.addEventListener('click', function() {
+            window.location.href = '<?php echo $_SESSION["prev_page"]; ?>';
+        });
 
         // Render hearts for lives
         function renderLivesBar() {
