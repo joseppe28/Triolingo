@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+$_SESSION['Lives'] = 3; // Reset lives for the new lesson
+
 $servername = "localhost";
 $username = "root";
 $password = "root";
