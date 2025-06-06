@@ -205,15 +205,6 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             // Fallback: falls keine Lessons in der Session, Standard-Lessons initialisieren
             $lessons = [
                 ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 1, 'label' => 'Lesson 1'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 2, 'label' => 'Lesson 2'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 3, 'label' => 'Lesson 3'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 4, 'label' => 'Lesson 4'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 5, 'label' => 'Lesson 5'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 6, 'label' => 'Lesson 6'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 7, 'label' => 'Lesson 7'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 8, 'label' => 'Lesson 8'],
-                ['vocab_count' => 8, 'einheit' => 2, 'lesson' => 9, 'label' => 'Lesson 9'],
-                ['vocab_count' => 8, 'einheit' => 1, 'lesson' => 10, 'label' => 'Lesson 10']
             ];
             $_SESSION['lessons'] = $lessons;
         }
@@ -328,5 +319,20 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['UserID'])) {
             });
         });
     </script>
+    <!-- Footer -->
+    <footer class="bg-white text-center text-lg-start shadow-sm" style="border-radius: 1.5rem 1.5rem 0 0; margin-top: 48px;">
+        <div class="container py-3 d-flex flex-column flex-md-row justify-content-between align-items-center" style="font-size: 1rem;">
+            <div class="mb-2 mb-md-0">
+                <i class="bi bi-telephone me-1"></i> +43 677 624 83256
+                &nbsp; | &nbsp;
+                <i class="bi bi-envelope me-1"></i> josmessner@tsn.at
+                &nbsp; | &nbsp;
+                <i class="bi bi-geo-alt me-1"></i> Anichstraße 36, 6020 Innsbruck
+            </div>
+            <div>
+                &copy; 2025 Triolingo &ndash; Alle Rechte vorbehalten
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
