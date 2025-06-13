@@ -235,6 +235,7 @@ $email = $_SESSION['email'];
                 </div>
                 <div class="user-info-actions">
                     <a href="logout.php" class="btn btn-danger"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                    <a href="credits.php" class="btn btn-primary ms-2"><i class="bi bi-people"></i> Credits</a>
                 </div>
             </div>
         </div>
