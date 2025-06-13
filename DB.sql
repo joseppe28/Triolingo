@@ -78,74 +78,6 @@ CREATE TABLE FehlerStatistik (
     FOREIGN KEY (VID) REFERENCES Vocab(VID)
 );
 
--- Insert test data into Einheit table
-INSERT INTO Einheit (Thema, Beschreibung) VALUES 
-('Basics', 'Basic vocabulary for beginners'),
-('Travel', 'Vocabulary related to travel and transportation'),
-('Food', 'Vocabulary related to food and dining'),
-('Work', 'Vocabulary related to work and professions');
-
--- Insert test data into Deutsch_Vocab table
-INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES 
-('Haus', 'haus.mp3', 'haus.jpg'),
-('Auto', 'auto.mp3', 'auto.jpg'),
-('Buch', 'buch.mp3', 'buch.jpg'),
-('Apfel', 'apfel.mp3', 'apfel.jpg'),
-('Hund', 'hund.mp3', 'hund.jpg'),
-('Katze', 'katze.mp3', 'katze.jpg'),
-('Tisch', 'tisch.mp3', 'tisch.jpg'),
-('Stuhl', 'stuhl.mp3', 'stuhl.jpg'),
-('Fenster', 'fenster.mp3', 'fenster.jpg'),
-('Tür', 'tuer.mp3', 'tuer.jpg'),
-('Baum', 'baum.mp3', 'baum.jpg'),
-('Blume', 'blume.mp3', 'blume.jpg'),
-('Wasser', 'wasser.mp3', 'wasser.jpg'),
-('Milch', 'milch.mp3', 'milch.jpg'),
-('Brot', 'brot.mp3', 'brot.jpg');
-
--- Insert test data into Englisch_Vocab table
-INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES 
-('House', 'house.mp3', 'house.jpg'),
-('Car', 'car.mp3', 'car.jpg'),
-('Book', 'book.mp3', 'book.jpg'),
-('Apple', 'apple.mp3', 'apple.jpg'),
-('Dog', 'dog.mp3', 'dog.jpg'),
-('Cat', 'cat.mp3', 'cat.jpg'),
-('Table', 'table.mp3', 'table.jpg'),
-('Chair', 'chair.mp3', 'chair.jpg'),
-('Window', 'window.mp3', 'window.jpg'),
-('Door', 'door.mp3', 'door.jpg'),
-('Tree', 'tree.mp3', 'tree.jpg'),
-('Flower', 'flower.mp3', 'flower.jpg'),
-('Water', 'water.mp3', 'water.jpg'),
-('Milk', 'milk.mp3', 'milk.jpg'),
-('Bread', 'bread.mp3', 'bread.jpg');
-
--- Insert test data into Vocab table
-INSERT INTO Vocab (EID, DID, EinID) VALUES 
-(1, 1, 1), -- House - Haus in Basics
-(2, 2, 1), -- Car - Auto in Basics
-(3, 3, 2), -- Book - Buch in Travel
-(4, 4, 3), -- Apple - Apfel in Food
-(5, 5, 1), -- Dog - Hund in Basics
-(6, 6, 1), -- Cat - Katze in Basics
-(7, 7, 1), -- Table - Tisch in Basics
-(8, 8, 1), -- Chair - Stuhl in Basics
-(9, 9, 1), -- Window - Fenster in Basics
-(10, 10, 1), -- Door - Tür in Basics
-(11, 11, 2), -- Tree - Baum in Travel
-(12, 12, 2), -- Flower - Blume in Travel
-(13, 13, 3), -- Water - Wasser in Food
-(14, 14, 3), -- Milk - Milch in Food
-(15, 15, 3); -- Bread - Brot in Food
-
--- Insert test data into Exercise table
-INSERT INTO Exercise (EinID, Typ) VALUES 
-(1, 'Multiple Choice'),
-(2, 'Fill in the Blanks'),
-(3, 'Matching'),
-(4, 'True or False');
-
 -- Insert test data into User table
 INSERT INTO User (Name, Passwort, Email) VALUES 
 ('Max Mustermann', 'password123', 'max@example.com'),
@@ -153,177 +85,690 @@ INSERT INTO User (Name, Passwort, Email) VALUES
 ('John Doe', 'mypassword', 'john@example.com'),
 ('Jane Smith', 'pass1234', 'jane@example.com');
 
--- Insert test data into Level table
-INSERT INTO Level (VID, UID, Level) VALUES 
-(1, 1, 1), -- Max Mustermann knows House - Haus at level 1
-(2, 2, 2), -- Erika Musterfrau knows Car - Auto at level 2
-(3, 3, 1), -- John Doe knows Book - Buch at level 1
-(4, 4, 3), -- Jane Smith knows Apple - Apfel at level 3
-(5, 1, 2), -- Max Mustermann knows Dog - Hund at level 2
-(6, 2, 1), -- Erika Musterfrau knows Cat - Katze at level 1
-(7, 3, 3), -- John Doe knows Table - Tisch at level 3
-(8, 4, 2), -- Jane Smith knows Chair - Stuhl at level 2
-(9, 1, 1), -- Max Mustermann knows Window - Fenster at level 1
-(10, 2, 3), -- Erika Musterfrau knows Door - Tür at level 3
-(11, 3, 2), -- John Doe knows Tree - Baum at level 2
-(12, 4, 1), -- Jane Smith knows Flower - Blume at level 1
-(13, 1, 3), -- Max Mustermann knows Water - Wasser at level 3
-(14, 2, 2), -- Erika Musterfrau knows Milk - Milch at level 2
-(15, 3, 1); -- John Doe knows Bread - Brot at level 1
 
--- Insert additional German vocabulary for Einheit 1
-INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES 
-('Mann', 'mann.mp3', 'mann.jpg'),
-('Frau', 'frau.mp3', 'frau.jpg'),
-('Kind', 'kind.mp3', 'kind.jpg'),
-('Junge', 'junge.mp3', 'junge.jpg'),
-('Mädchen', 'maedchen.mp3', 'maedchen.jpg'),
-('Wasser', 'wasser.mp3', 'wasser.jpg'),
-('Brot', 'brot.mp3', 'brot.jpg'),
-('Straße', 'strasse.mp3', 'strasse.jpg'),
-('Stadt', 'stadt.mp3', 'stadt.jpg'),
-('Land', 'land.mp3', 'land.jpg'),
-('Sonne', 'sonne.mp3', 'sonne.jpg'),
-('Mond', 'mond.mp3', 'mond.jpg'),
-('Stern', 'stern.mp3', 'stern.jpg'),
-('Himmel', 'himmel.mp3', 'himmel.jpg'),
-('Erde', 'erde.mp3', 'erde.jpg'),
-('Telefon', 'telefon.mp3', 'telefon.jpg'),
-('Computer', 'computer.mp3', 'computer.jpg'),
-('Schule', 'schule.mp3', 'schule.jpg'),
-('Büro', 'buero.mp3', 'buero.jpg'),
-('Zeit', 'zeit.mp3', 'zeit.jpg'),
-('Tag', 'tag.mp3', 'tag.jpg'),
-('Nacht', 'nacht.mp3', 'nacht.jpg'),
-('Morgen', 'morgen.mp3', 'morgen.jpg'),
-('Abend', 'abend.mp3', 'abend.jpg'),
-('Name', 'name.mp3', 'name.jpg'),
-('Freund', 'freund.mp3', 'freund.jpg'),
-('Familie', 'familie.mp3', 'familie.jpg'),
-('Eltern', 'eltern.mp3', 'eltern.jpg'),
-('Bruder', 'bruder.mp3', 'bruder.jpg'),
-('Schwester', 'schwester.mp3', 'schwester.jpg');
+-- Insert 10 Einheiten (units)
+INSERT INTO Einheit (Thema, Beschreibung) VALUES
+('Basics', 'Fundamental vocabulary for beginners'),
+('Food', 'Common food and drink items'),
+('Travel', 'Essential travel vocabulary'),
+('Family', 'Words related to family members'),
+('School', 'School and education related words'),
+('Nature', 'Nature and environment vocabulary'),
+('Clothing', 'Clothes and accessories'),
+('Colors', 'Names of colors'),
+('Body', 'Parts of the body'),
+('Time', 'Time and date vocabulary');
 
--- Insert corresponding English vocabulary
-INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES 
-('Man', 'man.mp3', 'man.jpg'),
-('Woman', 'woman.mp3', 'woman.jpg'),
-('Child', 'child.mp3', 'child.jpg'),
-('Boy', 'boy.mp3', 'boy.jpg'),
-('Girl', 'girl.mp3', 'girl.jpg'),
-('Water', 'water.mp3', 'water.jpg'),
-('Bread', 'bread.mp3', 'bread.jpg'),
-('Street', 'street.mp3', 'street.jpg'),
-('City', 'city.mp3', 'city.jpg'),
-('Country', 'country.mp3', 'country.jpg'),
-('Sun', 'sun.mp3', 'sun.jpg'),
-('Moon', 'moon.mp3', 'moon.jpg'),
-('Star', 'star.mp3', 'star.jpg'),
-('Sky', 'sky.mp3', 'sky.jpg'),
-('Earth', 'earth.mp3', 'earth.jpg'),
-('Phone', 'phone.mp3', 'phone.jpg'),
-('Computer', 'computer.mp3', 'computer.jpg'),
-('School', 'school.mp3', 'school.jpg'),
-('Office', 'office.mp3', 'office.jpg'),
-('Time', 'time.mp3', 'time.jpg'),
-('Day', 'day.mp3', 'day.jpg'),
-('Night', 'night.mp3', 'night.jpg'),
-('Morning', 'morning.mp3', 'morning.jpg'),
-('Evening', 'evening.mp3', 'evening.jpg'),
-('Name', 'name.mp3', 'name.jpg'),
-('Friend', 'friend.mp3', 'friend.jpg'),
-('Family', 'family.mp3', 'family.jpg'),
-('Parents', 'parents.mp3', 'parents.jpg'),
-('Brother', 'brother.mp3', 'brother.jpg'),
-('Sister', 'sister.mp3', 'sister.jpg');
+-- Insert 300 English and German vocab words (30 per Einheit)
+-- For simplicity, English and German words are paired in order
 
--- Link vocabulary pairs to Einheit 1
-INSERT INTO Vocab (EID, DID, EinID) VALUES 
-(16, 16, 1), -- Man - Mann
-(17, 17, 1), -- Woman - Frau
-(18, 18, 1), -- Child - Kind
-(19, 19, 1), -- Boy - Junge
-(20, 20, 1), -- Girl - Mädchen
-(21, 21, 1), -- Water - Wasser
-(22, 22, 1), -- Bread - Brot
-(23, 23, 1), -- Street - Straße
-(24, 24, 1), -- City - Stadt
-(25, 25, 1), -- Country - Land
-(26, 26, 1), -- Sun - Sonne
-(27, 27, 1), -- Moon - Mond
-(28, 28, 1), -- Star - Stern
-(29, 29, 1), -- Sky - Himmel
-(30, 30, 1), -- Earth - Erde
-(31, 31, 1), -- Phone - Telefon
-(32, 32, 1), -- Computer - Computer
-(33, 33, 1), -- School - Schule
-(34, 34, 1), -- Office - Büro
-(35, 35, 1), -- Time - Zeit
-(36, 36, 1), -- Day - Tag
-(37, 37, 1), -- Night - Nacht
-(38, 38, 1), -- Morning - Morgen
-(39, 39, 1), -- Evening - Abend
-(40, 40, 1), -- Name - Name
-(41, 41, 1), -- Friend - Freund
-(42, 42, 1), -- Family - Familie
-(43, 43, 1), -- Parents - Eltern
-(44, 44, 1), -- Brother - Bruder
-(45, 45, 1); -- Sister - Schwester
+-- Basics (EinID 1)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('hello', 'hello.mp3', NULL),
+('goodbye', 'goodbye.mp3', NULL),
+('please', 'please.mp3', NULL),
+('thank you', 'thankyou.mp3', NULL),
+('yes', 'yes.mp3', NULL),
+('no', 'no.mp3', NULL),
+('man', 'man.mp3', NULL),
+('woman', 'woman.mp3', NULL),
+('boy', 'boy.mp3', NULL),
+('girl', 'girl.mp3', NULL),
+('friend', 'friend.mp3', NULL),
+('family', 'family.mp3', NULL),
+('name', 'name.mp3', NULL),
+('country', 'country.mp3', NULL),
+('city', 'city.mp3', NULL),
+('street', 'street.mp3', NULL),
+('house', 'house.mp3', NULL),
+('apartment', 'apartment.mp3', NULL),
+('door', 'door.mp3', NULL),
+('window', 'window.mp3', NULL),
+('car', 'car.mp3', NULL),
+('bus', 'bus.mp3', NULL),
+('train', 'train.mp3', NULL),
+('bicycle', 'bicycle.mp3', NULL),
+('phone', 'phone.mp3', NULL),
+('computer', 'computer.mp3', NULL),
+('table', 'table.mp3', NULL),
+('chair', 'chair.mp3', NULL),
+('pen', 'pen.mp3', NULL),
+('book', 'book.mp3', NULL);
 
--- Assign random levels (1-3) for John Doe (UID 3) for the new vocabulary
-INSERT INTO Level (VID, UID, Level) VALUES 
-(16, 3, 0),
-(17, 3, 0),
-(18, 3, 0),
-(19, 3, 0),
-(20, 3, 1),
-(21, 3, 1),
-(22, 3, 1),
-(23, 3, 1),
-(24, 3, 1),
-(25, 3, 1),
-(26, 3, 1),
-(27, 3, 1),
-(28, 3, 1),
-(29, 3, 2),
-(30, 3, 2),
-(31, 3, 2),
-(32, 3, 2),
-(33, 3, 2),
-(34, 3, 2),
-(35, 3, 2),
-(36, 3, 2),
-(37, 3, 2),
-(38, 3, 2),
-(39, 3, 3),
-(40, 3, 3),
-(41, 3, 3),
-(42, 3, 3),
-(43, 3, 3),
-(44, 3, 3),
-(45, 3, 3);
--- Insert test data into User_Stats table
-INSERT INTO User_Stats (UID, Lessons_Completed, Words_Learned) VALUES 
-(1, 5, 10), -- Max Mustermann has completed 5 lessons and learned 10 words
-(2, 3, 8), -- Erika Musterfrau has completed 3 lessons and learned 8 words
-(3, 4, 12), -- John Doe has completed 4 lessons and learned 12 words
-(4, 2, 6); -- Jane Smith has completed 2 lessons and learned 6 words
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('hallo', 'hallo.mp3', NULL),
+('auf Wiedersehen', 'aufwiedersehen.mp3', NULL),
+('bitte', 'bitte.mp3', NULL),
+('danke', 'danke.mp3', NULL),
+('ja', 'ja.mp3', NULL),
+('nein', 'nein.mp3', NULL),
+('Mann', 'mann.mp3', NULL),
+('Frau', 'frau.mp3', NULL),
+('Junge', 'junge.mp3', NULL),
+('Mädchen', 'maedchen.mp3', NULL),
+('Freund', 'freund.mp3', NULL),
+('Familie', 'familie.mp3', NULL),
+('Name', 'name.mp3', NULL),
+('Land', 'land.mp3', NULL),
+('Stadt', 'stadt.mp3', NULL),
+('Straße', 'strasse.mp3', NULL),
+('Haus', 'haus.mp3', NULL),
+('Wohnung', 'wohnung.mp3', NULL),
+('Tür', 'tuer.mp3', NULL),
+('Fenster', 'fenster.mp3', NULL),
+('Auto', 'auto.mp3', NULL),
+('Bus', 'bus.mp3', NULL),
+('Zug', 'zug.mp3', NULL),
+('Fahrrad', 'fahrrad.mp3', NULL),
+('Telefon', 'telefon.mp3', NULL),
+('Computer', 'computer.mp3', NULL),
+('Tisch', 'tisch.mp3', NULL),
+('Stuhl', 'stuhl.mp3', NULL),
+('Stift', 'stift.mp3', NULL),
+('Buch', 'buch.mp3', NULL);
 
+-- Food (EinID 2)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('bread', 'bread.mp3', NULL),
+('water', 'water.mp3', NULL),
+('milk', 'milk.mp3', NULL),
+('apple', 'apple.mp3', NULL),
+('banana', 'banana.mp3', NULL),
+('orange', 'orange.mp3', NULL),
+('cheese', 'cheese.mp3', NULL),
+('egg', 'egg.mp3', NULL),
+('meat', 'meat.mp3', NULL),
+('fish', 'fish.mp3', NULL),
+('chicken', 'chicken.mp3', NULL),
+('rice', 'rice.mp3', NULL),
+('potato', 'potato.mp3', NULL),
+('tomato', 'tomato.mp3', NULL),
+('salad', 'salad.mp3', NULL),
+('soup', 'soup.mp3', NULL),
+('butter', 'butter.mp3', NULL),
+('cake', 'cake.mp3', NULL),
+('sugar', 'sugar.mp3', NULL),
+('salt', 'salt.mp3', NULL),
+('pepper', 'pepper.mp3', NULL),
+('carrot', 'carrot.mp3', NULL),
+('onion', 'onion.mp3', NULL),
+('garlic', 'garlic.mp3', NULL),
+('lemon', 'lemon.mp3', NULL),
+('grape', 'grape.mp3', NULL),
+('strawberry', 'strawberry.mp3', NULL),
+('coffee', 'coffee.mp3', NULL),
+('tea', 'tea.mp3', NULL),
+('juice', 'juice.mp3', NULL);
 
-Insert into Lesson (BID, UID) values
-(1, 1), -- Max Mustermann completed lesson 1
-(2, 2), -- Erika Musterfrau completed lesson 2
-(3, 3); -- John Doe completed lesson 3
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Brot', 'brot.mp3', NULL),
+('Wasser', 'wasser.mp3', NULL),
+('Milch', 'milch.mp3', NULL),
+('Apfel', 'apfel.mp3', NULL),
+('Banane', 'banane.mp3', NULL),
+('Orange', 'orange.mp3', NULL),
+('Käse', 'kaese.mp3', NULL),
+('Ei', 'ei.mp3', NULL),
+('Fleisch', 'fleisch.mp3', NULL),
+('Fisch', 'fisch.mp3', NULL),
+('Hähnchen', 'haehnchen.mp3', NULL),
+('Reis', 'reis.mp3', NULL),
+('Kartoffel', 'kartoffel.mp3', NULL),
+('Tomate', 'tomate.mp3', NULL),
+('Salat', 'salat.mp3', NULL),
+('Suppe', 'suppe.mp3', NULL),
+('Butter', 'butter.mp3', NULL),
+('Kuchen', 'kuchen.mp3', NULL),
+('Zucker', 'zucker.mp3', NULL),
+('Salz', 'salz.mp3', NULL),
+('Pfeffer', 'pfeffer.mp3', NULL),
+('Karotte', 'karotte.mp3', NULL),
+('Zwiebel', 'zwiebel.mp3', NULL),
+('Knoblauch', 'knoblauch.mp3', NULL),
+('Zitrone', 'zitrone.mp3', NULL),
+('Traube', 'traube.mp3', NULL),
+('Erdbeere', 'erdbeere.mp3', NULL),
+('Kaffee', 'kaffee.mp3', NULL),
+('Tee', 'tee.mp3', NULL),
+('Saft', 'saft.mp3', NULL);
 
--- Insert test data into FehlerStatistik table
-INSERT INTO FehlerStatistik (UID, VID, FehlerAnzahl) VALUES
-(1, 1, 2),
-(1, 5, 1),
-(2, 2, 3),
-(2, 6, 0),
-(3, 3, 4),
-(3, 7, 2),
-(3, 20, 1),
-(4, 4, 0),
-(4, 8, 2),
-(4, 12, 1);
+-- Travel (EinID 3)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('airport', 'airport.mp3', NULL),
+('plane', 'plane.mp3', NULL),
+('ticket', 'ticket.mp3', NULL),
+('passport', 'passport.mp3', NULL),
+('hotel', 'hotel.mp3', NULL),
+('reservation', 'reservation.mp3', NULL),
+('luggage', 'luggage.mp3', NULL),
+('map', 'map.mp3', NULL),
+('guide', 'guide.mp3', NULL),
+('tour', 'tour.mp3', NULL),
+('bus stop', 'busstop.mp3', NULL),
+('station', 'station.mp3', NULL),
+('platform', 'platform.mp3', NULL),
+('departure', 'departure.mp3', NULL),
+('arrival', 'arrival.mp3', NULL),
+('taxi', 'taxi.mp3', NULL),
+('subway', 'subway.mp3', NULL),
+('ticket office', 'ticketoffice.mp3', NULL),
+('currency', 'currency.mp3', NULL),
+('exchange', 'exchange.mp3', NULL),
+('border', 'border.mp3', NULL),
+('customs', 'customs.mp3', NULL),
+('embassy', 'embassy.mp3', NULL),
+('address', 'address.mp3', NULL),
+('direction', 'direction.mp3', NULL),
+('left', 'left.mp3', NULL),
+('right', 'right.mp3', NULL),
+('straight', 'straight.mp3', NULL),
+('corner', 'corner.mp3', NULL),
+('crossing', 'crossing.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Flughafen', 'flughafen.mp3', NULL),
+('Flugzeug', 'flugzeug.mp3', NULL),
+('Ticket', 'ticket.mp3', NULL),
+('Pass', 'pass.mp3', NULL),
+('Hotel', 'hotel.mp3', NULL),
+('Reservierung', 'reservierung.mp3', NULL),
+('Gepäck', 'gepaeck.mp3', NULL),
+('Karte', 'karte.mp3', NULL),
+('Reiseführer', 'reisefuehrer.mp3', NULL),
+('Tour', 'tour.mp3', NULL),
+('Bushaltestelle', 'bushaltestelle.mp3', NULL),
+('Bahnhof', 'bahnhof.mp3', NULL),
+('Bahnsteig', 'bahnsteig.mp3', NULL),
+('Abfahrt', 'abfahrt.mp3', NULL),
+('Ankunft', 'ankunft.mp3', NULL),
+('Taxi', 'taxi.mp3', NULL),
+('U-Bahn', 'ubahn.mp3', NULL),
+('Fahrkartenschalter', 'fahrkartenschalter.mp3', NULL),
+('Währung', 'waehrung.mp3', NULL),
+('Wechsel', 'wechsel.mp3', NULL),
+('Grenze', 'grenze.mp3', NULL),
+('Zoll', 'zoll.mp3', NULL),
+('Botschaft', 'botschaft.mp3', NULL),
+('Adresse', 'adresse.mp3', NULL),
+('Richtung', 'richtung.mp3', NULL),
+('links', 'links.mp3', NULL),
+('rechts', 'rechts.mp3', NULL),
+('geradeaus', 'geradeaus.mp3', NULL),
+('Ecke', 'ecke.mp3', NULL),
+('Kreuzung', 'kreuzung.mp3', NULL);
+
+-- Family (EinID 4)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('father', 'father.mp3', NULL),
+('mother', 'mother.mp3', NULL),
+('son', 'son.mp3', NULL),
+('daughter', 'daughter.mp3', NULL),
+('brother', 'brother.mp3', NULL),
+('sister', 'sister.mp3', NULL),
+('grandfather', 'grandfather.mp3', NULL),
+('grandmother', 'grandmother.mp3', NULL),
+('uncle', 'uncle.mp3', NULL),
+('aunt', 'aunt.mp3', NULL),
+('cousin', 'cousin.mp3', NULL),
+('nephew', 'nephew.mp3', NULL),
+('niece', 'niece.mp3', NULL),
+('parents', 'parents.mp3', NULL),
+('children', 'children.mp3', NULL),
+('husband', 'husband.mp3', NULL),
+('wife', 'wife.mp3', NULL),
+('family', 'family.mp3', NULL),
+('relative', 'relative.mp3', NULL),
+('child', 'child.mp3', NULL),
+('baby', 'baby.mp3', NULL),
+('marriage', 'marriage.mp3', NULL),
+('divorce', 'divorce.mp3', NULL),
+('stepfather', 'stepfather.mp3', NULL),
+('stepmother', 'stepmother.mp3', NULL),
+('stepson', 'stepson.mp3', NULL),
+('stepdaughter', 'stepdaughter.mp3', NULL),
+('godfather', 'godfather.mp3', NULL),
+('godmother', 'godmother.mp3', NULL),
+('partner', 'partner.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Vater', 'vater.mp3', NULL),
+('Mutter', 'mutter.mp3', NULL),
+('Sohn', 'sohn.mp3', NULL),
+('Tochter', 'tochter.mp3', NULL),
+('Bruder', 'bruder.mp3', NULL),
+('Schwester', 'schwester.mp3', NULL),
+('Großvater', 'grossvater.mp3', NULL),
+('Großmutter', 'grossmutter.mp3', NULL),
+('Onkel', 'onkel.mp3', NULL),
+('Tante', 'tante.mp3', NULL),
+('Cousin', 'cousin.mp3', NULL),
+('Neffe', 'neffe.mp3', NULL),
+('Nichte', 'nichte.mp3', NULL),
+('Eltern', 'eltern.mp3', NULL),
+('Kinder', 'kinder.mp3', NULL),
+('Ehemann', 'ehemann.mp3', NULL),
+('Ehefrau', 'ehefrau.mp3', NULL),
+('Familie', 'familie.mp3', NULL),
+('Verwandte', 'verwandte.mp3', NULL),
+('Kind', 'kind.mp3', NULL),
+('Baby', 'baby.mp3', NULL),
+('Ehe', 'ehe.mp3', NULL),
+('Scheidung', 'scheidung.mp3', NULL),
+('Stiefvater', 'stiefvater.mp3', NULL),
+('Stiefmutter', 'stiefmutter.mp3', NULL),
+('Stiefsohn', 'stiefsohn.mp3', NULL),
+('Stieftochter', 'stieftochter.mp3', NULL),
+('Pate', 'pate.mp3', NULL),
+('Patin', 'patin.mp3', NULL),
+('Partner', 'partner.mp3', NULL);
+
+-- School (EinID 5)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('school', 'school.mp3', NULL),
+('teacher', 'teacher.mp3', NULL),
+('student', 'student.mp3', NULL),
+('class', 'class.mp3', NULL),
+('lesson', 'lesson.mp3', NULL),
+('homework', 'homework.mp3', NULL),
+('exam', 'exam.mp3', NULL),
+('grade', 'grade.mp3', NULL),
+('subject', 'subject.mp3', NULL),
+('math', 'math.mp3', NULL),
+('science', 'science.mp3', NULL),
+('history', 'history.mp3', NULL),
+('geography', 'geography.mp3', NULL),
+('language', 'language.mp3', NULL),
+('art', 'art.mp3', NULL),
+('music', 'music.mp3', NULL),
+('sport', 'sport.mp3', NULL),
+('book', 'book.mp3', NULL),
+('notebook', 'notebook.mp3', NULL),
+('pencil', 'pencil.mp3', NULL),
+('eraser', 'eraser.mp3', NULL),
+('ruler', 'ruler.mp3', NULL),
+('desk', 'desk.mp3', NULL),
+('chair', 'chair.mp3', NULL),
+('blackboard', 'blackboard.mp3', NULL),
+('chalk', 'chalk.mp3', NULL),
+('test', 'test.mp3', NULL),
+('question', 'question.mp3', NULL),
+('answer', 'answer.mp3', NULL),
+('schoolbag', 'schoolbag.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Schule', 'schule.mp3', NULL),
+('Lehrer', 'lehrer.mp3', NULL),
+('Schüler', 'schueler.mp3', NULL),
+('Klasse', 'klasse.mp3', NULL),
+('Unterricht', 'unterricht.mp3', NULL),
+('Hausaufgabe', 'hausaufgabe.mp3', NULL),
+('Prüfung', 'pruefung.mp3', NULL),
+('Note', 'note.mp3', NULL),
+('Fach', 'fach.mp3', NULL),
+('Mathe', 'mathe.mp3', NULL),
+('Naturwissenschaft', 'naturwissenschaft.mp3', NULL),
+('Geschichte', 'geschichte.mp3', NULL),
+('Geografie', 'geografie.mp3', NULL),
+('Sprache', 'sprache.mp3', NULL),
+('Kunst', 'kunst.mp3', NULL),
+('Musik', 'musik.mp3', NULL),
+('Sport', 'sport.mp3', NULL),
+('Buch', 'buch.mp3', NULL),
+('Heft', 'heft.mp3', NULL),
+('Bleistift', 'bleistift.mp3', NULL),
+('Radiergummi', 'radiergummi.mp3', NULL),
+('Lineal', 'lineal.mp3', NULL),
+('Schreibtisch', 'schreibtisch.mp3', NULL),
+('Stuhl', 'stuhl.mp3', NULL),
+('Tafel', 'tafel.mp3', NULL),
+('Kreide', 'kreide.mp3', NULL),
+('Test', 'test.mp3', NULL),
+('Frage', 'frage.mp3', NULL),
+('Antwort', 'antwort.mp3', NULL),
+('Schulranzen', 'schulranzen.mp3', NULL);
+
+-- Nature (EinID 6)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('tree', 'tree.mp3', NULL),
+('flower', 'flower.mp3', NULL),
+('grass', 'grass.mp3', NULL),
+('leaf', 'leaf.mp3', NULL),
+('forest', 'forest.mp3', NULL),
+('mountain', 'mountain.mp3', NULL),
+('river', 'river.mp3', NULL),
+('lake', 'lake.mp3', NULL),
+('sea', 'sea.mp3', NULL),
+('ocean', 'ocean.mp3', NULL),
+('sky', 'sky.mp3', NULL),
+('cloud', 'cloud.mp3', NULL),
+('rain', 'rain.mp3', NULL),
+('snow', 'snow.mp3', NULL),
+('wind', 'wind.mp3', NULL),
+('sun', 'sun.mp3', NULL),
+('moon', 'moon.mp3', NULL),
+('star', 'star.mp3', NULL),
+('animal', 'animal.mp3', NULL),
+('bird', 'bird.mp3', NULL),
+('fish', 'fish.mp3', NULL),
+('dog', 'dog.mp3', NULL),
+('cat', 'cat.mp3', NULL),
+('horse', 'horse.mp3', NULL),
+('cow', 'cow.mp3', NULL),
+('sheep', 'sheep.mp3', NULL),
+('pig', 'pig.mp3', NULL),
+('chicken', 'chicken.mp3', NULL),
+('insect', 'insect.mp3', NULL),
+('butterfly', 'butterfly.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Baum', 'baum.mp3', NULL),
+('Blume', 'blume.mp3', NULL),
+('Gras', 'gras.mp3', NULL),
+('Blatt', 'blatt.mp3', NULL),
+('Wald', 'wald.mp3', NULL),
+('Berg', 'berg.mp3', NULL),
+('Fluss', 'fluss.mp3', NULL),
+('See', 'see.mp3', NULL),
+('Meer', 'meer.mp3', NULL),
+('Ozean', 'ozean.mp3', NULL),
+('Himmel', 'himmel.mp3', NULL),
+('Wolke', 'wolke.mp3', NULL),
+('Regen', 'regen.mp3', NULL),
+('Schnee', 'schnee.mp3', NULL),
+('Wind', 'wind.mp3', NULL),
+('Sonne', 'sonne.mp3', NULL),
+('Mond', 'mond.mp3', NULL),
+('Stern', 'stern.mp3', NULL),
+('Tier', 'tier.mp3', NULL),
+('Vogel', 'vogel.mp3', NULL),
+('Fisch', 'fisch.mp3', NULL),
+('Hund', 'hund.mp3', NULL),
+('Katze', 'katze.mp3', NULL),
+('Pferd', 'pferd.mp3', NULL),
+('Kuh', 'kuh.mp3', NULL),
+('Schaf', 'schaf.mp3', NULL),
+('Schwein', 'schwein.mp3', NULL),
+('Huhn', 'huhn.mp3', NULL),
+('Insekt', 'insekt.mp3', NULL),
+('Schmetterling', 'schmetterling.mp3', NULL);
+
+-- Clothing (EinID 7)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('shirt', 'shirt.mp3', NULL),
+('pants', 'pants.mp3', NULL),
+('dress', 'dress.mp3', NULL),
+('skirt', 'skirt.mp3', NULL),
+('jacket', 'jacket.mp3', NULL),
+('coat', 'coat.mp3', NULL),
+('hat', 'hat.mp3', NULL),
+('cap', 'cap.mp3', NULL),
+('scarf', 'scarf.mp3', NULL),
+('gloves', 'gloves.mp3', NULL),
+('shoes', 'shoes.mp3', NULL),
+('boots', 'boots.mp3', NULL),
+('socks', 'socks.mp3', NULL),
+('tie', 'tie.mp3', NULL),
+('belt', 'belt.mp3', NULL),
+('sweater', 'sweater.mp3', NULL),
+('t-shirt', 'tshirt.mp3', NULL),
+('shorts', 'shorts.mp3', NULL),
+('jeans', 'jeans.mp3', NULL),
+('blouse', 'blouse.mp3', NULL),
+('suit', 'suit.mp3', NULL),
+('pajamas', 'pajamas.mp3', NULL),
+('underwear', 'underwear.mp3', NULL),
+('bra', 'bra.mp3', NULL),
+('swimsuit', 'swimsuit.mp3', NULL),
+('raincoat', 'raincoat.mp3', NULL),
+('sandals', 'sandals.mp3', NULL),
+('slippers', 'slippers.mp3', NULL),
+('zipper', 'zipper.mp3', NULL),
+('button', 'button.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Hemd', 'hemd.mp3', NULL),
+('Hose', 'hose.mp3', NULL),
+('Kleid', 'kleid.mp3', NULL),
+('Rock', 'rock.mp3', NULL),
+('Jacke', 'jacke.mp3', NULL),
+('Mantel', 'mantel.mp3', NULL),
+('Hut', 'hut.mp3', NULL),
+('Mütze', 'muetze.mp3', NULL),
+('Schal', 'schal.mp3', NULL),
+('Handschuhe', 'handschuhe.mp3', NULL),
+('Schuhe', 'schuhe.mp3', NULL),
+('Stiefel', 'stiefel.mp3', NULL),
+('Socken', 'socken.mp3', NULL),
+('Krawatte', 'krawatte.mp3', NULL),
+('Gürtel', 'guertel.mp3', NULL),
+('Pullover', 'pullover.mp3', NULL),
+('T-Shirt', 'tshirt.mp3', NULL),
+('Shorts', 'shorts.mp3', NULL),
+('Jeans', 'jeans.mp3', NULL),
+('Bluse', 'bluse.mp3', NULL),
+('Anzug', 'anzug.mp3', NULL),
+('Schlafanzug', 'schlafanzug.mp3', NULL),
+('Unterwäsche', 'unterwaesche.mp3', NULL),
+('BH', 'bh.mp3', NULL),
+('Badeanzug', 'badeanzug.mp3', NULL),
+('Regenmantel', 'regenmantel.mp3', NULL),
+('Sandalen', 'sandalen.mp3', NULL),
+('Hausschuhe', 'hausschuhe.mp3', NULL),
+('Reißverschluss', 'reissverschluss.mp3', NULL),
+('Knopf', 'knopf.mp3', NULL);
+
+-- Colors (EinID 8)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('red', 'red.mp3', NULL),
+('blue', 'blue.mp3', NULL),
+('green', 'green.mp3', NULL),
+('yellow', 'yellow.mp3', NULL),
+('orange', 'orange.mp3', NULL),
+('purple', 'purple.mp3', NULL),
+('pink', 'pink.mp3', NULL),
+('brown', 'brown.mp3', NULL),
+('black', 'black.mp3', NULL),
+('white', 'white.mp3', NULL),
+('gray', 'gray.mp3', NULL),
+('gold', 'gold.mp3', NULL),
+('silver', 'silver.mp3', NULL),
+('beige', 'beige.mp3', NULL),
+('turquoise', 'turquoise.mp3', NULL),
+('violet', 'violet.mp3', NULL),
+('magenta', 'magenta.mp3', NULL),
+('cyan', 'cyan.mp3', NULL),
+('olive', 'olive.mp3', NULL),
+('navy', 'navy.mp3', NULL),
+('maroon', 'maroon.mp3', NULL),
+('teal', 'teal.mp3', NULL),
+('lime', 'lime.mp3', NULL),
+('indigo', 'indigo.mp3', NULL),
+('amber', 'amber.mp3', NULL),
+('peach', 'peach.mp3', NULL),
+('mint', 'mint.mp3', NULL),
+('coral', 'coral.mp3', NULL),
+('lavender', 'lavender.mp3', NULL),
+('cream', 'cream.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('rot', 'rot.mp3', NULL),
+('blau', 'blau.mp3', NULL),
+('grün', 'gruen.mp3', NULL),
+('gelb', 'gelb.mp3', NULL),
+('orange', 'orange.mp3', NULL),
+('lila', 'lila.mp3', NULL),
+('rosa', 'rosa.mp3', NULL),
+('braun', 'braun.mp3', NULL),
+('schwarz', 'schwarz.mp3', NULL),
+('weiß', 'weiss.mp3', NULL),
+('grau', 'grau.mp3', NULL),
+('gold', 'gold.mp3', NULL),
+('silber', 'silber.mp3', NULL),
+('beige', 'beige.mp3', NULL),
+('türkis', 'tuerkis.mp3', NULL),
+('violett', 'violett.mp3', NULL),
+('magenta', 'magenta.mp3', NULL),
+('cyan', 'cyan.mp3', NULL),
+('oliv', 'oliv.mp3', NULL),
+('marineblau', 'marineblau.mp3', NULL),
+('kastanienbraun', 'kastanienbraun.mp3', NULL),
+('blaugrün', 'blaugruen.mp3', NULL),
+('limette', 'limette.mp3', NULL),
+('indigo', 'indigo.mp3', NULL),
+('bernstein', 'bernstein.mp3', NULL),
+('pfirsich', 'pfirsich.mp3', NULL),
+('minze', 'minze.mp3', NULL),
+('koralle', 'koralle.mp3', NULL),
+('lavendel', 'lavendel.mp3', NULL),
+('creme', 'creme.mp3', NULL);
+
+-- Body (EinID 9)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('head', 'head.mp3', NULL),
+('face', 'face.mp3', NULL),
+('hair', 'hair.mp3', NULL),
+('eye', 'eye.mp3', NULL),
+('ear', 'ear.mp3', NULL),
+('nose', 'nose.mp3', NULL),
+('mouth', 'mouth.mp3', NULL),
+('tooth', 'tooth.mp3', NULL),
+('tongue', 'tongue.mp3', NULL),
+('neck', 'neck.mp3', NULL),
+('shoulder', 'shoulder.mp3', NULL),
+('arm', 'arm.mp3', NULL),
+('elbow', 'elbow.mp3', NULL),
+('hand', 'hand.mp3', NULL),
+('finger', 'finger.mp3', NULL),
+('thumb', 'thumb.mp3', NULL),
+('chest', 'chest.mp3', NULL),
+('back', 'back.mp3', NULL),
+('stomach', 'stomach.mp3', NULL),
+('leg', 'leg.mp3', NULL),
+('knee', 'knee.mp3', NULL),
+('foot', 'foot.mp3', NULL),
+('toe', 'toe.mp3', NULL),
+('skin', 'skin.mp3', NULL),
+('bone', 'bone.mp3', NULL),
+('muscle', 'muscle.mp3', NULL),
+('heart', 'heart.mp3', NULL),
+('lung', 'lung.mp3', NULL),
+('brain', 'brain.mp3', NULL),
+('blood', 'blood.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Kopf', 'kopf.mp3', NULL),
+('Gesicht', 'gesicht.mp3', NULL),
+('Haar', 'haar.mp3', NULL),
+('Auge', 'auge.mp3', NULL),
+('Ohr', 'ohr.mp3', NULL),
+('Nase', 'nase.mp3', NULL),
+('Mund', 'mund.mp3', NULL),
+('Zahn', 'zahn.mp3', NULL),
+('Zunge', 'zunge.mp3', NULL),
+('Hals', 'hals.mp3', NULL),
+('Schulter', 'schulter.mp3', NULL),
+('Arm', 'arm.mp3', NULL),
+('Ellbogen', 'ellbogen.mp3', NULL),
+('Hand', 'hand.mp3', NULL),
+('Finger', 'finger.mp3', NULL),
+('Daumen', 'daumen.mp3', NULL),
+('Brust', 'brust.mp3', NULL),
+('Rücken', 'ruecken.mp3', NULL),
+('Bauch', 'bauch.mp3', NULL),
+('Bein', 'bein.mp3', NULL),
+('Knie', 'knie.mp3', NULL),
+('Fuß', 'fuss.mp3', NULL),
+('Zeh', 'zeh.mp3', NULL),
+('Haut', 'haut.mp3', NULL),
+('Knochen', 'knochen.mp3', NULL),
+('Muskel', 'muskel.mp3', NULL),
+('Herz', 'herz.mp3', NULL),
+('Lunge', 'lunge.mp3', NULL),
+('Gehirn', 'gehirn.mp3', NULL),
+('Blut', 'blut.mp3', NULL);
+
+-- Time (EinID 10)
+INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
+('day', 'day.mp3', NULL),
+('night', 'night.mp3', NULL),
+('morning', 'morning.mp3', NULL),
+('afternoon', 'afternoon.mp3', NULL),
+('evening', 'evening.mp3', NULL),
+('hour', 'hour.mp3', NULL),
+('minute', 'minute.mp3', NULL),
+('second', 'second.mp3', NULL),
+('week', 'week.mp3', NULL),
+('month', 'month.mp3', NULL),
+('year', 'year.mp3', NULL),
+('today', 'today.mp3', NULL),
+('tomorrow', 'tomorrow.mp3', NULL),
+('yesterday', 'yesterday.mp3', NULL),
+('calendar', 'calendar.mp3', NULL),
+('clock', 'clock.mp3', NULL),
+('time', 'time.mp3', NULL),
+('date', 'date.mp3', NULL),
+('birthday', 'birthday.mp3', NULL),
+('holiday', 'holiday.mp3', NULL),
+('season', 'season.mp3', NULL),
+('spring', 'spring.mp3', NULL),
+('summer', 'summer.mp3', NULL),
+('autumn', 'autumn.mp3', NULL),
+('winter', 'winter.mp3', NULL),
+('Monday', 'monday.mp3', NULL),
+('Tuesday', 'tuesday.mp3', NULL),
+('Wednesday', 'wednesday.mp3', NULL),
+('Thursday', 'thursday.mp3', NULL),
+('Friday', 'friday.mp3', NULL);
+
+INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
+('Tag', 'tag.mp3', NULL),
+('Nacht', 'nacht.mp3', NULL),
+('Morgen', 'morgen.mp3', NULL),
+('Nachmittag', 'nachmittag.mp3', NULL),
+('Abend', 'abend.mp3', NULL),
+('Stunde', 'stunde.mp3', NULL),
+('Minute', 'minute.mp3', NULL),
+('Sekunde', 'sekunde.mp3', NULL),
+('Woche', 'woche.mp3', NULL),
+('Monat', 'monat.mp3', NULL),
+('Jahr', 'jahr.mp3', NULL),
+('heute', 'heute.mp3', NULL),
+('morgen', 'morgen.mp3', NULL),
+('gestern', 'gestern.mp3', NULL),
+('Kalender', 'kalender.mp3', NULL),
+('Uhr', 'uhr.mp3', NULL),
+('Zeit', 'zeit.mp3', NULL),
+('Datum', 'datum.mp3', NULL),
+('Geburtstag', 'geburtstag.mp3', NULL),
+('Feiertag', 'feiertag.mp3', NULL),
+('Jahreszeit', 'jahreszeit.mp3', NULL),
+('Frühling', 'fruehling.mp3', NULL),
+('Sommer', 'sommer.mp3', NULL),
+('Herbst', 'herbst.mp3', NULL),
+('Winter', 'winter.mp3', NULL),
+('Montag', 'montag.mp3', NULL),
+('Dienstag', 'dienstag.mp3', NULL),
+('Mittwoch', 'mittwoch.mp3', NULL),
+('Donnerstag', 'donnerstag.mp3', NULL),
+('Freitag', 'freitag.mp3', NULL);
+
+-- Now insert the combos into Vocab
+-- The IDs for Englisch_Vocab and Deutsch_Vocab are assumed to be sequential and start after the previous inserts.
+-- For each Einheit, insert 30 vocab combos
+-- Insert combos into Vocab table for each Einheit (1-10), 30 vocab pairs per Einheit
+INSERT INTO Vocab (EID, DID, EinID)
+SELECT e.EID, d.DID, u.EinID
+FROM (
+    SELECT 1 AS EinID, 1 AS StartID
+    UNION ALL SELECT 2, 31
+    UNION ALL SELECT 3, 61
+    UNION ALL SELECT 4, 91
+    UNION ALL SELECT 5, 121
+    UNION ALL SELECT 6, 151
+    UNION ALL SELECT 7, 181
+    UNION ALL SELECT 8, 211
+    UNION ALL SELECT 9, 241
+    UNION ALL SELECT 10, 271
+) u
+JOIN Englisch_Vocab e ON e.EID BETWEEN u.StartID AND u.StartID + 29
+JOIN Deutsch_Vocab d ON d.DID = e.EID;
