@@ -36,14 +36,18 @@ session_start();
             text-align: center;
         }
         .back-arrow {
-            position: absolute;
+            position: fixed;
             top: 32px;
             left: 32px;
             font-size: 2rem;
             color: #0d6efd;
             text-decoration: none;
-            z-index: 10;
+            z-index: 1051;
             transition: color 0.13s;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 2px 6px 2px 4px;
         }
         .back-arrow:hover {
             color: #084298;
