@@ -90,8 +90,6 @@ $stmt2->execute();
 if ($stmt2->error) {
     $_SESSION['err'] = $stmt2->error;
     header("Location: error.php");
-} else {
-    $_SESSION['UserID'] = $conn->insert_id; // Save the user ID in the session
 }
 $stmt2->close();
 $conn->close();
