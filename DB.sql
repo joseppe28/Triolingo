@@ -135,6 +135,8 @@ INSERT INTO Englisch_Vocab (Wort, Audio, Bild) VALUES
 ('pen', 'pen.mp3', NULL),
 ('book', 'book.mp3', NULL);
 
+
+
 INSERT INTO Deutsch_Vocab (Wort, Audio, Bild) VALUES
 ('hallo', 'hallo.mp3', NULL),
 ('auf Wiedersehen', 'aufwiedersehen.mp3', NULL),

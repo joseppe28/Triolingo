@@ -211,7 +211,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             <div class="writing-btns">
                 <button id="action-button" class="btn btn-primary btn-lg px-4">Check</button>
                 <button id="next-lesson-btn" class="btn btn-success d-none">Go to Next Lesson</button>
-                <button id="return-btn" class="btn btn-secondary d-none">Return to Previous Page</button>
             </div>
         </div>
     </div>
@@ -285,17 +284,17 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
                 completedWords++;
                 if (completedWords >= vocabList.length) {
                     document.getElementById('action-button').classList.add('d-none');
-                    document.getElementById('next-lesson-btn').classList.remove('d-none');
                     
                     // If it's a lesson, go to next lesson, otherwise return to prev page
                     if (!isLesson) {
+                        document.getElementById('next-lesson-btn').classList.remove('d-none');
                         document.getElementById('next-lesson-btn').textContent = 'Return to Previous Page';
                         document.getElementById('next-lesson-btn').addEventListener('click', function() {
                             window.location.href = prevPage;
                         });
                     } else {
-                        document.getElementById('return-btn').classList.remove('d-none');
-                        document.getElementById('next-lesson-btn').textContent = 'Go to Next Lesson';
+                        document.getElementById('next-lesson-btn').classList.remove('d-none');
+                        document.getElementById('next-lesson-btn').textContent = 'Back to Main Menu';
                         document.getElementById('next-lesson-btn').addEventListener('click', function() {
                             window.location.href = 'completeLesson.php';
                         });
