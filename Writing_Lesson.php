@@ -184,7 +184,6 @@ if (!isset($_SESSION['vocabList']) || empty($_SESSION['vocabList'])) {
             <?php if ($_SESSION['is_lesson']): ?>
             <!-- Only show lives if this is a lesson -->
             <div class="text-center mb-3">
-                <p class="text-center text-danger fw-bold">Lives Remaining: <span id="lives-count"><?= $_SESSION['Lives'] ?></span></p>
                 <div class="lives-bar mb-3" id="lives-bar"></div>
             </div>
             <?php endif; ?>

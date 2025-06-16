@@ -100,7 +100,7 @@ $isLesson = isset($_SESSION['is_lesson']) ? $_SESSION['is_lesson'] : false;
             padding: 2rem 1.5rem 1.5rem 1.5rem;
         }
         .talking-card .vocab-word {
-            font-family: 'Pacifico', cursive;
+            font-family: 'Arial';
             font-size: 2rem;
             color: #0d6efd;
             margin-bottom: 0.7rem;
@@ -251,7 +251,6 @@ $isLesson = isset($_SESSION['is_lesson']) ? $_SESSION['is_lesson'] : false;
             <?php if ($isLesson): ?>
             <!-- Only show lives if this is a lesson -->
             <div class="text-center mb-3">
-                <p class="text-center text-danger fw-bold">Lives Remaining: <span id="lives-count"><?= $_SESSION['Lives'] ?></span></p>
                 <div class="lives-bar" id="lives-bar"></div>
             </div>
             <?php endif; ?>
